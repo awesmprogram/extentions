@@ -4823,8 +4823,7 @@ cr-toast > div {
         <span id="devModeLabel">Developer mode</span>
         <cr-tooltip-icon hidden$="[[!devModeControlledByPolicy]]" tooltip-text="This setting is enforced by your administrator." icon-class="cr20:domain" icon-aria-label="This setting is enforced by your administrator.">
         </cr-tooltip-icon>
-        <cr-toggle id="devMode" on-change="onDevModeToggleChange_" disabled="[[shouldDisableDevMode_(
-                devModeControlledByPolicy, isSupervised)]]" checked="[[inDevMode]]" aria-labelledby="devModeLabel">
+        <cr-toggle id="devMode" on-change="onDevModeToggleChange_" checked="[[inDevMode]]" aria-labelledby="devModeLabel">
         </cr-toggle>
       </div>
     </cr-toolbar>
