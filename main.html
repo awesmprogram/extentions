@@ -1,0 +1,5198 @@
+
+<!DOCTYPE html><html dir="ltr" lang="en" class="loading "><head><base href="chrome://extensions"><!--
+@license
+Copyright (c) 2015 The Polymer Project Authors. All rights reserved.
+This code may only be used under the BSD style license found at http://polymer.github.io/LICENSE.txt
+The complete set of authors may be found at http://polymer.github.io/AUTHORS.txt
+The complete set of contributors may be found at http://polymer.github.io/CONTRIBUTORS.txt
+Code distributed by Google as part of the polymer project is also
+subject to an additional IP rights grant found at http://polymer.github.io/PATENTS.txt
+--><!--
+@license
+Copyright (c) 2018 The Polymer Project Authors. All rights reserved.
+This code may only be used under the BSD style license found at http://polymer.github.io/LICENSE.txt
+The complete set of authors may be found at http://polymer.github.io/AUTHORS.txt
+The complete set of contributors may be found at http://polymer.github.io/CONTRIBUTORS.txt
+Code distributed by Google as part of the polymer project is also
+subject to an additional IP rights grant found at http://polymer.github.io/PATENTS.txt
+--><!--
+@license
+Copyright (c) 2014 The Polymer Project Authors. All rights reserved.
+This code may only be used under the BSD style license found at http://polymer.github.io/LICENSE.txt
+The complete set of authors may be found at http://polymer.github.io/AUTHORS.txt
+The complete set of contributors may be found at http://polymer.github.io/CONTRIBUTORS.txt
+Code distributed by Google as part of the polymer project is also
+subject to an additional IP rights grant found at http://polymer.github.io/PATENTS.txt
+--><!--
+@license
+Copyright (c) 2017 The Polymer Project Authors. All rights reserved.
+This code may only be used under the BSD style license found at http://polymer.github.io/LICENSE.txt
+The complete set of authors may be found at http://polymer.github.io/AUTHORS.txt
+The complete set of contributors may be found at http://polymer.github.io/CONTRIBUTORS.txt
+Code distributed by Google as part of the polymer project is also
+subject to an additional IP rights grant found at http://polymer.github.io/PATENTS.txt
+-->
+  <meta charset="utf8">
+  <title>Extensions</title>
+
+  <style>
+    html {
+      /* --md-background-color in disguise. Not using the var for increased
+       * performance. */
+      background-color: rgb(248, 249, 250);
+
+      /* Remove 300ms delay for 'click' event, when using touch interface. */
+      touch-action: manipulation;
+    }
+
+    .loading {
+      /* --google-blue-700 in disguise. Replaced when manager.html loads. */
+      border-top: 56px solid rgb(51, 103, 214);
+    }
+
+    /* Note: .in-dev-mode is applied by i18n{loadTimeClasses}. */
+    .loading.in-dev-mode {
+      /* --google-blue-700: rgb(51, 103, 214); */
+      /* --google-grey-300: #e0e0e0; */
+      border-image: linear-gradient(to bottom, rgb(51, 103, 214) 56px,
+          #fff 56px, #fff 107px, #e0e0e0 107px) 108;
+      border-top: 108px solid;
+    }
+
+    html,
+    body {
+      height: 100%;
+      line-height: 154%;
+      margin: 0;
+      overflow: hidden;
+      width: 100%;
+    }
+  </style>
+</head>
+<body><div hidden="" by-polymer-bundler=""><link rel="import" href="chrome://resources/html/polymer.html">
+
+<link rel="import" href="chrome://resources/polymer/v1_0/polymer/polymer.html">
+
+<custom-style>
+  <style is="custom-style" css-build="shadow">html {
+  --google-red-100: #f4c7c3;
+      --google-red-300: #e67c73;
+      --google-red-500: #db4437;
+      --google-red-700: #c53929;
+
+      --google-blue-100: #c6dafc;
+      --google-blue-300: #7baaf7;
+      --google-blue-500: #4285f4;
+      --google-blue-700: #3367d6;
+
+      --google-green-100: #b7e1cd;
+      --google-green-300: #57bb8a;
+      --google-green-500: #0f9d58;
+      --google-green-700: #0b8043;
+
+      --google-yellow-100: #fce8b2;
+      --google-yellow-300: #f7cb4d;
+      --google-yellow-500: #f4b400;
+      --google-yellow-700: #f09300;
+
+      --google-grey-100: #f5f5f5;
+      --google-grey-300: #e0e0e0;
+      --google-grey-500: #9e9e9e;
+      --google-grey-700: #616161;
+
+      
+
+      --paper-red-50: #ffebee;
+      --paper-red-100: #ffcdd2;
+      --paper-red-200: #ef9a9a;
+      --paper-red-300: #e57373;
+      --paper-red-400: #ef5350;
+      --paper-red-500: #f44336;
+      --paper-red-600: #e53935;
+      --paper-red-700: #d32f2f;
+      --paper-red-800: #c62828;
+      --paper-red-900: #b71c1c;
+      --paper-red-a100: #ff8a80;
+      --paper-red-a200: #ff5252;
+      --paper-red-a400: #ff1744;
+      --paper-red-a700: #d50000;
+
+      --paper-pink-50: #fce4ec;
+      --paper-pink-100: #f8bbd0;
+      --paper-pink-200: #f48fb1;
+      --paper-pink-300: #f06292;
+      --paper-pink-400: #ec407a;
+      --paper-pink-500: #e91e63;
+      --paper-pink-600: #d81b60;
+      --paper-pink-700: #c2185b;
+      --paper-pink-800: #ad1457;
+      --paper-pink-900: #880e4f;
+      --paper-pink-a100: #ff80ab;
+      --paper-pink-a200: #ff4081;
+      --paper-pink-a400: #f50057;
+      --paper-pink-a700: #c51162;
+
+      --paper-purple-50: #f3e5f5;
+      --paper-purple-100: #e1bee7;
+      --paper-purple-200: #ce93d8;
+      --paper-purple-300: #ba68c8;
+      --paper-purple-400: #ab47bc;
+      --paper-purple-500: #9c27b0;
+      --paper-purple-600: #8e24aa;
+      --paper-purple-700: #7b1fa2;
+      --paper-purple-800: #6a1b9a;
+      --paper-purple-900: #4a148c;
+      --paper-purple-a100: #ea80fc;
+      --paper-purple-a200: #e040fb;
+      --paper-purple-a400: #d500f9;
+      --paper-purple-a700: #aa00ff;
+
+      --paper-deep-purple-50: #ede7f6;
+      --paper-deep-purple-100: #d1c4e9;
+      --paper-deep-purple-200: #b39ddb;
+      --paper-deep-purple-300: #9575cd;
+      --paper-deep-purple-400: #7e57c2;
+      --paper-deep-purple-500: #673ab7;
+      --paper-deep-purple-600: #5e35b1;
+      --paper-deep-purple-700: #512da8;
+      --paper-deep-purple-800: #4527a0;
+      --paper-deep-purple-900: #311b92;
+      --paper-deep-purple-a100: #b388ff;
+      --paper-deep-purple-a200: #7c4dff;
+      --paper-deep-purple-a400: #651fff;
+      --paper-deep-purple-a700: #6200ea;
+
+      --paper-indigo-50: #e8eaf6;
+      --paper-indigo-100: #c5cae9;
+      --paper-indigo-200: #9fa8da;
+      --paper-indigo-300: #7986cb;
+      --paper-indigo-400: #5c6bc0;
+      --paper-indigo-500: #3f51b5;
+      --paper-indigo-600: #3949ab;
+      --paper-indigo-700: #303f9f;
+      --paper-indigo-800: #283593;
+      --paper-indigo-900: #1a237e;
+      --paper-indigo-a100: #8c9eff;
+      --paper-indigo-a200: #536dfe;
+      --paper-indigo-a400: #3d5afe;
+      --paper-indigo-a700: #304ffe;
+
+      --paper-blue-50: #e3f2fd;
+      --paper-blue-100: #bbdefb;
+      --paper-blue-200: #90caf9;
+      --paper-blue-300: #64b5f6;
+      --paper-blue-400: #42a5f5;
+      --paper-blue-500: #2196f3;
+      --paper-blue-600: #1e88e5;
+      --paper-blue-700: #1976d2;
+      --paper-blue-800: #1565c0;
+      --paper-blue-900: #0d47a1;
+      --paper-blue-a100: #82b1ff;
+      --paper-blue-a200: #448aff;
+      --paper-blue-a400: #2979ff;
+      --paper-blue-a700: #2962ff;
+
+      --paper-light-blue-50: #e1f5fe;
+      --paper-light-blue-100: #b3e5fc;
+      --paper-light-blue-200: #81d4fa;
+      --paper-light-blue-300: #4fc3f7;
+      --paper-light-blue-400: #29b6f6;
+      --paper-light-blue-500: #03a9f4;
+      --paper-light-blue-600: #039be5;
+      --paper-light-blue-700: #0288d1;
+      --paper-light-blue-800: #0277bd;
+      --paper-light-blue-900: #01579b;
+      --paper-light-blue-a100: #80d8ff;
+      --paper-light-blue-a200: #40c4ff;
+      --paper-light-blue-a400: #00b0ff;
+      --paper-light-blue-a700: #0091ea;
+
+      --paper-cyan-50: #e0f7fa;
+      --paper-cyan-100: #b2ebf2;
+      --paper-cyan-200: #80deea;
+      --paper-cyan-300: #4dd0e1;
+      --paper-cyan-400: #26c6da;
+      --paper-cyan-500: #00bcd4;
+      --paper-cyan-600: #00acc1;
+      --paper-cyan-700: #0097a7;
+      --paper-cyan-800: #00838f;
+      --paper-cyan-900: #006064;
+      --paper-cyan-a100: #84ffff;
+      --paper-cyan-a200: #18ffff;
+      --paper-cyan-a400: #00e5ff;
+      --paper-cyan-a700: #00b8d4;
+
+      --paper-teal-50: #e0f2f1;
+      --paper-teal-100: #b2dfdb;
+      --paper-teal-200: #80cbc4;
+      --paper-teal-300: #4db6ac;
+      --paper-teal-400: #26a69a;
+      --paper-teal-500: #009688;
+      --paper-teal-600: #00897b;
+      --paper-teal-700: #00796b;
+      --paper-teal-800: #00695c;
+      --paper-teal-900: #004d40;
+      --paper-teal-a100: #a7ffeb;
+      --paper-teal-a200: #64ffda;
+      --paper-teal-a400: #1de9b6;
+      --paper-teal-a700: #00bfa5;
+
+      --paper-green-50: #e8f5e9;
+      --paper-green-100: #c8e6c9;
+      --paper-green-200: #a5d6a7;
+      --paper-green-300: #81c784;
+      --paper-green-400: #66bb6a;
+      --paper-green-500: #4caf50;
+      --paper-green-600: #43a047;
+      --paper-green-700: #388e3c;
+      --paper-green-800: #2e7d32;
+      --paper-green-900: #1b5e20;
+      --paper-green-a100: #b9f6ca;
+      --paper-green-a200: #69f0ae;
+      --paper-green-a400: #00e676;
+      --paper-green-a700: #00c853;
+
+      --paper-light-green-50: #f1f8e9;
+      --paper-light-green-100: #dcedc8;
+      --paper-light-green-200: #c5e1a5;
+      --paper-light-green-300: #aed581;
+      --paper-light-green-400: #9ccc65;
+      --paper-light-green-500: #8bc34a;
+      --paper-light-green-600: #7cb342;
+      --paper-light-green-700: #689f38;
+      --paper-light-green-800: #558b2f;
+      --paper-light-green-900: #33691e;
+      --paper-light-green-a100: #ccff90;
+      --paper-light-green-a200: #b2ff59;
+      --paper-light-green-a400: #76ff03;
+      --paper-light-green-a700: #64dd17;
+
+      --paper-lime-50: #f9fbe7;
+      --paper-lime-100: #f0f4c3;
+      --paper-lime-200: #e6ee9c;
+      --paper-lime-300: #dce775;
+      --paper-lime-400: #d4e157;
+      --paper-lime-500: #cddc39;
+      --paper-lime-600: #c0ca33;
+      --paper-lime-700: #afb42b;
+      --paper-lime-800: #9e9d24;
+      --paper-lime-900: #827717;
+      --paper-lime-a100: #f4ff81;
+      --paper-lime-a200: #eeff41;
+      --paper-lime-a400: #c6ff00;
+      --paper-lime-a700: #aeea00;
+
+      --paper-yellow-50: #fffde7;
+      --paper-yellow-100: #fff9c4;
+      --paper-yellow-200: #fff59d;
+      --paper-yellow-300: #fff176;
+      --paper-yellow-400: #ffee58;
+      --paper-yellow-500: #ffeb3b;
+      --paper-yellow-600: #fdd835;
+      --paper-yellow-700: #fbc02d;
+      --paper-yellow-800: #f9a825;
+      --paper-yellow-900: #f57f17;
+      --paper-yellow-a100: #ffff8d;
+      --paper-yellow-a200: #ffff00;
+      --paper-yellow-a400: #ffea00;
+      --paper-yellow-a700: #ffd600;
+
+      --paper-amber-50: #fff8e1;
+      --paper-amber-100: #ffecb3;
+      --paper-amber-200: #ffe082;
+      --paper-amber-300: #ffd54f;
+      --paper-amber-400: #ffca28;
+      --paper-amber-500: #ffc107;
+      --paper-amber-600: #ffb300;
+      --paper-amber-700: #ffa000;
+      --paper-amber-800: #ff8f00;
+      --paper-amber-900: #ff6f00;
+      --paper-amber-a100: #ffe57f;
+      --paper-amber-a200: #ffd740;
+      --paper-amber-a400: #ffc400;
+      --paper-amber-a700: #ffab00;
+
+      --paper-orange-50: #fff3e0;
+      --paper-orange-100: #ffe0b2;
+      --paper-orange-200: #ffcc80;
+      --paper-orange-300: #ffb74d;
+      --paper-orange-400: #ffa726;
+      --paper-orange-500: #ff9800;
+      --paper-orange-600: #fb8c00;
+      --paper-orange-700: #f57c00;
+      --paper-orange-800: #ef6c00;
+      --paper-orange-900: #e65100;
+      --paper-orange-a100: #ffd180;
+      --paper-orange-a200: #ffab40;
+      --paper-orange-a400: #ff9100;
+      --paper-orange-a700: #ff6500;
+
+      --paper-deep-orange-50: #fbe9e7;
+      --paper-deep-orange-100: #ffccbc;
+      --paper-deep-orange-200: #ffab91;
+      --paper-deep-orange-300: #ff8a65;
+      --paper-deep-orange-400: #ff7043;
+      --paper-deep-orange-500: #ff5722;
+      --paper-deep-orange-600: #f4511e;
+      --paper-deep-orange-700: #e64a19;
+      --paper-deep-orange-800: #d84315;
+      --paper-deep-orange-900: #bf360c;
+      --paper-deep-orange-a100: #ff9e80;
+      --paper-deep-orange-a200: #ff6e40;
+      --paper-deep-orange-a400: #ff3d00;
+      --paper-deep-orange-a700: #dd2c00;
+
+      --paper-brown-50: #efebe9;
+      --paper-brown-100: #d7ccc8;
+      --paper-brown-200: #bcaaa4;
+      --paper-brown-300: #a1887f;
+      --paper-brown-400: #8d6e63;
+      --paper-brown-500: #795548;
+      --paper-brown-600: #6d4c41;
+      --paper-brown-700: #5d4037;
+      --paper-brown-800: #4e342e;
+      --paper-brown-900: #3e2723;
+
+      --paper-grey-50: #fafafa;
+      --paper-grey-100: #f5f5f5;
+      --paper-grey-200: #eeeeee;
+      --paper-grey-300: #e0e0e0;
+      --paper-grey-400: #bdbdbd;
+      --paper-grey-500: #9e9e9e;
+      --paper-grey-600: #757575;
+      --paper-grey-700: #616161;
+      --paper-grey-800: #424242;
+      --paper-grey-900: #212121;
+
+      --paper-blue-grey-50: #eceff1;
+      --paper-blue-grey-100: #cfd8dc;
+      --paper-blue-grey-200: #b0bec5;
+      --paper-blue-grey-300: #90a4ae;
+      --paper-blue-grey-400: #78909c;
+      --paper-blue-grey-500: #607d8b;
+      --paper-blue-grey-600: #546e7a;
+      --paper-blue-grey-700: #455a64;
+      --paper-blue-grey-800: #37474f;
+      --paper-blue-grey-900: #263238;
+
+      
+      --dark-divider-opacity: 0.12;
+      --dark-disabled-opacity: 0.38; 
+      --dark-secondary-opacity: 0.54;
+      --dark-primary-opacity: 0.87;
+
+      
+      --light-divider-opacity: 0.12;
+      --light-disabled-opacity: 0.3; 
+      --light-secondary-opacity: 0.7;
+      --light-primary-opacity: 1.0;
+}
+
+</style>
+</custom-style>
+<custom-style>
+<style is="custom-style" css-build="shadow">html {
+  --cr-primary-text-color: var(--google-grey-900);
+    --cr-secondary-text-color: var(--google-grey-refresh-700);
+
+    --cr-actionable_-_cursor:  pointer;;
+
+    --cr-button-edge-spacing: 12px;
+
+    
+    --cr-controlled-by-spacing: 24px;
+
+    --cr-focused-item-color: var(--google-grey-300);
+
+    
+    --cr-icon-ripple-size: 36px;
+    --cr-icon-ripple-padding: 8px;
+
+    --cr-icon-size: 20px;
+
+    --cr-icon-height-width_-_height:  var(--cr-icon-size); --cr-icon-height-width_-_width:  var(--cr-icon-size);
+
+    --cr-icon-button-margin-start: 16px;
+
+    --cr-icon-ripple-margin: calc(var(--cr-icon-ripple-padding) * -1);
+
+    
+    --cr-page-host_-_color:  var(--cr-primary-text-color); --cr-page-host_-_line-height:  154%; --cr-page-host_-_overflow:  hidden; --cr-page-host_-_user-select:  text;;
+
+    --cr-paper-icon-button-margin_-_-webkit-margin-end:  var(--cr-icon-ripple-margin); --cr-paper-icon-button-margin_-_-webkit-margin-start:  var(--cr-icon-button-margin-start);
+
+    --cr-primary-text_-_color:  var(--cr-primary-text-color); --cr-primary-text_-_line-height:  154%;
+
+    --cr-secondary-text_-_color:  var(--cr-secondary-text-color); --cr-secondary-text_-_font-weight:  400;
+
+    
+    
+    --cr-section-min-height: 48px;
+    --cr-section-two-line-min-height: 64px;
+    --cr-section-three-line-min-height: 84px;
+
+    --cr-section-padding: 20px;
+    --cr-section-indent-width: 40px;
+    --cr-section-indent-padding: calc(
+        var(--cr-section-padding) + var(--cr-section-indent-width));
+
+    --cr-section_-_align-items:  center; --cr-section_-_border-top:  var(--cr-separator-line); --cr-section_-_display:  flex; --cr-section_-_min-height:  var(--cr-section-min-height); --cr-section_-_padding:  0 var(--cr-section-padding);;
+
+    --cr-text-elide_-_overflow:  hidden; --cr-text-elide_-_text-overflow:  ellipsis; --cr-text-elide_-_white-space:  nowrap;;
+
+    --cr-title-text_-_color:  rgb(90, 90, 90); --cr-title-text_-_font-size:  107.6923%; --cr-title-text_-_font-weight:  500;;
+
+    --cr-section-text_-_color:  var(--google-grey-refresh-700); --cr-section-text_-_font-size:  100%; --cr-section-text_-_font-weight:  500;;
+
+    --cr-toggle-color: var(--google-blue-500);
+
+    --cr-tooltip_-_font-size:  92.31%; --cr-tooltip_-_font-weight:  500; --cr-tooltip_-_max-width:  330px; --cr-tooltip_-_min-width:  200px; --cr-tooltip_-_padding:  10px 8px;
+
+    --cr-selectable-focus_-_background-color:  var(--cr-focused-item-color); --cr-selectable-focus_-_outline:  none;
+    --cr-separator-height: 1px;
+    --cr-separator-line: var(--cr-separator-height) solid rgba(0, 0, 0, 0.06);
+
+    --cr-toolbar-overlay-animation-duration: 150ms;
+
+    --cr-container-shadow_-_box-shadow:  inset 0 5px 6px -3px rgba(0, 0, 0, 0.4); --cr-container-shadow_-_height:  6px; --cr-container-shadow_-_left:  0; --cr-container-shadow_-_margin-bottom:  -6px; --cr-container-shadow_-_opacity:  0; --cr-container-shadow_-_pointer-events:  none; --cr-container-shadow_-_position:  relative; --cr-container-shadow_-_right:  0; --cr-container-shadow_-_top:  0px; --cr-container-shadow_-_transition:  opacity 500ms; --cr-container-shadow_-_z-index:  1;
+
+    --cr-container-shadow-max-opacity: 1;
+
+    
+    --cr-card-border-radius: 4px;
+    --cr-card-elevation_-_box-shadow:  rgba(60, 64, 67, .3) 0 1px 2px 0,
+                  rgba(60, 64, 67, .15) 0 1px 3px 1px;
+    --cr-disabled-opacity: 0.38;
+    --cr-form-field-bottom-spacing: 16px;
+    --cr-form-field-label-font-size: 0.625rem;
+    --cr-form-field-label_-_color:  var(--google-grey-refresh-700); --cr-form-field-label_-_display:  block; --cr-form-field-label_-_font-size:  var(--cr-form-field-label-font-size); --cr-form-field-label_-_font-weight:  500; --cr-form-field-label_-_letter-spacing:  0.4px; --cr-form-field-label_-_line-height:  var(--cr-form-field-label-font-size); --cr-form-field-label_-_margin-bottom:  8px;
+    --google-blue-50: #E8F0FE;
+    --google-blue-600: #1A73E8;
+    
+    --google-green-refresh-700: #188038;
+    --google-blue-600-opacity-24: rgba(26, 115, 232, 0.24);
+    
+    --google-grey-refresh-100: #F1F3F4;
+    --google-grey-200: #E8EAED;
+    --google-grey-400: #BDC1C6;
+    --google-grey-600: #80868B;
+    --google-grey-600-opacity-24: rgba(128, 134, 139, 0.24);
+    
+    --google-grey-refresh-700: #5F6368;
+    --google-grey-900: #202124;
+    --google-red-600: #D93025;
+}
+
+</style>
+</custom-style>
+<dom-module id="cr-drawer" assetpath="chrome://resources/cr_elements/cr_drawer/" css-build="shadow">
+  <template>
+    <style scope="cr-drawer">:host dialog {
+  --drawer-width: 256px;
+        --transition-timing: 200ms ease;
+        background-color: #fff;
+        border: none;
+        bottom: 0;
+        left: calc(-1 * var(--drawer-width));
+        margin: 0;
+        overflow: hidden;
+        padding: 0;
+        position: absolute;
+        top: 0;
+        transition: left var(--transition-timing);
+        width: var(--drawer-width);
+}
+
+:host dialog, #container {
+  height: 100%;
+        word-break: break-word;
+}
+
+:host(.opening) dialog {
+  left: 0;
+}
+
+:host([align=rtl]) dialog {
+  left: auto;
+        right: calc(-1 * var(--drawer-width));
+        transition: right var(--transition-timing);
+}
+
+:host(.opening[align=rtl]) dialog {
+  right: 0;
+}
+
+:host dialog::backdrop {
+  background: rgba(0, 0, 0, 0.5);
+        bottom: 0;
+        left: 0;
+        opacity: 0;
+        position: absolute;
+        right: 0;
+        top: 0;
+        transition: opacity var(--transition-timing);
+}
+
+:host(.opening) dialog::backdrop {
+  opacity: 1;
+}
+
+.drawer-header {
+  -webkit-padding-start: 24px;
+        align-items: center;
+        border-bottom: var(--cr-separator-line);
+        display: flex;
+        font-size: 123.08%;  
+        min-height: 56px;
+        outline: none;
+}
+
+:host ::content> .drawer-content {
+  height: calc(100% - 56px);
+        overflow: auto;
+}
+
+</style>
+    <dialog id="dialog" on-cancel="onDialogCancel_" on-tap="onDialogTap_" on-transitionend="onDialogTransitionEnd_" on-close="onDialogClose_">
+      <div id="container" on-tap="onContainerTap_">
+        <div class="drawer-header" tabindex="-1">[[heading]]</div>
+        <slot></slot>
+      </div>
+    </dialog>
+  </template>
+</dom-module>
+<dom-module id="cr-lazy-render" assetpath="chrome://resources/cr_elements/cr_lazy_render/" css-build="shadow">
+  <template>
+    <slot></slot>
+  </template>
+  </dom-module>
+<dom-module id="cr-icons" assetpath="chrome://resources/cr_elements/" css-build="shadow">
+  <template>
+    <style scope="cr-icons">:host-context([dir=rtl]) :-webkit-any(paper-icon-button-light, .cr-icon) {
+  transform: scaleX(-1);
+}
+
+paper-icon-button-light paper-ripple {
+  color: currentColor;
+        opacity: 0.6;
+}
+
+paper-icon-button-light button {
+  display: block;
+}
+
+paper-icon-button-light, .cr-icon {
+  -webkit-margin-end: var(--cr-paper-icon-button-margin_-_-webkit-margin-end); -webkit-margin-start: var(--cr-paper-icon-button-margin_-_-webkit-margin-start);
+        background-position: center;
+        background-repeat: no-repeat;
+        background-size: var(--cr-icon-size);
+        flex-shrink: 0;
+        height: var(--cr-icon-ripple-size);
+        user-select: none;
+        width: var(--cr-icon-ripple-size);
+}
+
+:-webkit-any(paper-icon-button-light, .cr-icon).no-overlap {
+  margin-left: 0;
+        margin-right: 0;
+}
+
+:-webkit-any(paper-icon-button-light, .cr-icon).icon-arrow-back {
+  background-image: url("chrome://resources/images/icon_arrow_back.svg");
+}
+
+:-webkit-any(paper-icon-button-light, .cr-icon).icon-cancel {
+  background-image: url("chrome://resources/images/icon_cancel.svg");
+}
+
+:-webkit-any(paper-icon-button-light, .cr-icon).icon-cancel-toolbar {
+  background-image: url("chrome://resources/images/icon_cancel_toolbar.svg");
+}
+
+:-webkit-any(paper-icon-button-light, .cr-icon).icon-clear {
+  background-image: url("chrome://resources/images/icon_clear.svg");
+}
+
+:-webkit-any(paper-icon-button-light, .cr-icon).icon-delete-gray {
+  background-image: url("chrome://resources/images/icon_delete_gray.svg");
+}
+
+:-webkit-any(paper-icon-button-light, .cr-icon).icon-delete-white {
+  background-image: url("chrome://resources/images/icon_delete_white.svg");
+}
+
+:-webkit-any(paper-icon-button-light, .cr-icon).icon-expand-less {
+  background-image: url("chrome://resources/images/icon_expand_less.svg");
+}
+
+:-webkit-any(paper-icon-button-light, .cr-icon).icon-expand-more {
+  background-image: url("chrome://resources/images/icon_expand_more.svg");
+}
+
+:-webkit-any(paper-icon-button-light, .cr-icon).icon-external {
+  background-image: url("chrome://resources/images/open_in_new.svg");
+}
+
+:-webkit-any(paper-icon-button-light, .cr-icon).icon-menu-white {
+  background-image: url("chrome://resources/images/icon_menu_white.svg");
+}
+
+:-webkit-any(paper-icon-button-light, .cr-icon).icon-more-vert {
+  background-image: url("chrome://resources/images/icon_more_vert.svg");
+}
+
+:-webkit-any(paper-icon-button-light, .cr-icon).icon-refresh {
+  background-image: url("chrome://resources/images/icon_refresh.svg");
+}
+
+:-webkit-any(paper-icon-button-light, .cr-icon).icon-settings {
+  background-image: url("chrome://resources/images/icon_settings.svg");
+}
+
+:-webkit-any(paper-icon-button-light, .cr-icon).icon-search {
+  background-image: url("chrome://resources/images/icon_search.svg");
+}
+
+:-webkit-any(paper-icon-button-light, .cr-icon).icon-arrow-dropdown {
+  background-image: url("chrome://resources/images/icon_arrow_dropdown.svg");
+}
+
+:-webkit-any(paper-icon-button-light, .cr-icon).subpage-arrow {
+  background-image: url("chrome://resources/images/arrow_right.svg");
+}
+
+:-webkit-any(paper-icon-button-light, .cr-icon).icon-visibility {
+  background-image: url("chrome://resources/images/icon_visibility.svg");
+}
+
+:-webkit-any(paper-icon-button-light, .cr-icon).icon-visibility-off {
+  background-image: url("chrome://resources/images/icon_visibility_off.svg");
+}
+
+</style>
+  </template>
+</dom-module>
+<iron-iconset-svg name="cr20" size="20">
+  <svg>
+    <defs>
+      <g id="domain"><path d="M2,3 L2,17 L11.8267655,17 L13.7904799,17 L18,17 L18,7 L12,7 L12,3 L2,3 Z M8,13 L10,13 L10,15 L8,15 L8,13 Z M4,13 L6,13 L6,15 L4,15 L4,13 Z M8,9 L10,9 L10,11 L8,11 L8,9 Z M4,9 L6,9 L6,11 L4,11 L4,9 Z M12,9 L16,9 L16,15 L12,15 L12,9 Z M12,11 L14,11 L14,13 L12,13 L12,11 Z M8,5 L10,5 L10,7 L8,7 L8,5 Z M4,5 L6,5 L6,7 L4,7 L4,5 Z"></path></g>
+  </defs></svg>
+</iron-iconset-svg>
+<iron-iconset-svg name="cr" size="24">
+  <svg>
+    <defs>
+      <g id="account-child-invert" viewBox="0 0 48 48"><path d="M24 4c3.31 0 6 2.69 6 6s-2.69 6-6 6-6-2.69-6-6 2.69-6 6-6z"></path><path fill="none" d="M0 0h48v48H0V0z"></path><circle fill="none" cx="24" cy="26" r="4"></circle><path d="M24 18c-6.16 0-13 3.12-13 7.23v11.54c0 2.32 2.19 4.33 5.2 5.63 2.32 1 5.12 1.59 7.8 1.59.66 0 1.33-.06 2-.14v-5.2c-.67.08-1.34.14-2 .14-2.63 0-5.39-.57-7.68-1.55.67-2.12 4.34-3.65 7.68-3.65.86 0 1.75.11 2.6.29 2.79.62 5.2 2.15 5.2 4.04v4.47c3.01-1.31 5.2-3.31 5.2-5.63V25.23C37 21.12 30.16 18 24 18zm0 12c-2.21 0-4-1.79-4-4s1.79-4 4-4 4 1.79 4 4-1.79 4-4 4z"></path></g>
+      <g id="add"><path d="M19 13h-6v6h-2v-6H5v-2h6V5h2v6h6v2z"></path></g>
+      <g id="arrow-drop-up"><path d="M7 14l5-5 5 5z"></path></g>
+      <g id="arrow-drop-down"><path d="M7 10l5 5 5-5z"></path></g>
+
+      <g id="bluetooth"><path d="M17.71 7.71L12 2h-1v7.59L6.41 5 5 6.41 10.59 12 5 17.59 6.41 19 11 14.41V22h1l5.71-5.71-4.3-4.29 4.3-4.29zM13 5.83l1.88 1.88L13 9.59V5.83zm1.88 10.46L13 18.17v-3.76l1.88 1.88z"></path></g>
+      <g id="camera-alt"><circle cx="12" cy="12" r="3.2"></circle><path d="M9 2L7.17 4H4c-1.1 0-2 .9-2 2v12c0 1.1.9 2 2 2h16c1.1 0 2-.9 2-2V6c0-1.1-.9-2-2-2h-3.17L15 2H9zm3 15c-2.76 0-5-2.24-5-5s2.24-5 5-5 5 2.24 5 5-2.24 5-5 5z"></path></g>
+
+      <g id="check"><path d="M9 16.17L4.83 12l-1.42 1.41L9 19 21 7l-1.41-1.41z"></path></g>
+      <g id="chevron-right"><path d="M10 6L8.59 7.41 13.17 12l-4.58 4.59L10 18l6-6z"></path></g>
+      <g id="clear"><path d="M19 6.41L17.59 5 12 10.59 6.41 5 5 6.41 10.59 12 5 17.59 6.41 19 12 13.41 17.59 19 19 17.59 13.41 12z"></path></g>
+      <g id="close"><path d="M19 6.41L17.59 5 12 10.59 6.41 5 5 6.41 10.59 12 5 17.59 6.41 19 12 13.41 17.59 19 19 17.59 13.41 12z"></path></g>
+      <g id="delete"><path d="M6 19c0 1.1.9 2 2 2h8c1.1 0 2-.9 2-2V7H6v12zM19 4h-3.5l-1-1h-5l-1 1H5v2h14V4z"></path></g>
+      <g id="error"><path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm1 15h-2v-2h2v2zm0-4h-2V7h2v6z"></path></g>
+      <g id="error-outline"><path d="M11 15h2v2h-2zm0-8h2v6h-2zm.99-5C6.47 2 2 6.48 2 12s4.47 10 9.99 10C17.52 22 22 17.52 22 12S17.52 2 11.99 2zM12 20c-4.42 0-8-3.58-8-8s3.58-8 8-8 8 3.58 8 8-3.58 8-8 8z"></path></g>
+      <g id="expand-less"><path d="M12 8l-6 6 1.41 1.41L12 10.83l4.59 4.58L18 14z"></path></g>
+      <g id="expand-more"><path d="M16.59 8.59L12 13.17 7.41 8.59 6 10l6 6 6-6z"></path></g>
+      <g id="extension"><path d="M20.5 11H19V7c0-1.1-.9-2-2-2h-4V3.5C13 2.12 11.88 1 10.5 1S8 2.12 8 3.5V5H4c-1.1 0-1.99.9-1.99 2v3.8H3.5c1.49 0 2.7 1.21 2.7 2.7s-1.21 2.7-2.7 2.7H2V20c0 1.1.9 2 2 2h3.8v-1.5c0-1.49 1.21-2.7 2.7-2.7 1.49 0 2.7 1.21 2.7 2.7V22H17c1.1 0 2-.9 2-2v-4h1.5c1.38 0 2.5-1.12 2.5-2.5S21.88 11 20.5 11z"></path></g>
+      <g id="file-download"><path d="M19 9h-4V3H9v6H5l7 7 7-7zM5 18v2h14v-2H5z"></path></g>
+      <g id="folder"><path d="M10 4H4c-1.1 0-1.99.9-1.99 2L2 18c0 1.1.9 2 2 2h16c1.1 0 2-.9 2-2V8c0-1.1-.9-2-2-2h-8l-2-2z"></path></g>
+      <g id="fullscreen"><path d="M7 14H5v5h5v-2H7v-3zm-2-4h2V7h3V5H5v5zm12 7h-3v2h5v-5h-2v3zM14 5v2h3v3h2V5h-5z"></path></g>
+      <g id="group"><path d="M16 11c1.66 0 2.99-1.34 2.99-3S17.66 5 16 5c-1.66 0-3 1.34-3 3s1.34 3 3 3zm-8 0c1.66 0 2.99-1.34 2.99-3S9.66 5 8 5C6.34 5 5 6.34 5 8s1.34 3 3 3zm0 2c-2.33 0-7 1.17-7 3.5V19h14v-2.5c0-2.33-4.67-3.5-7-3.5zm8 0c-.29 0-.62.02-.97.05 1.16.84 1.97 1.97 1.97 3.45V19h6v-2.5c0-2.33-4.67-3.5-7-3.5z"></path></g>
+      <g id="info"><path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm1 15h-2v-6h2v6zm0-8h-2V7h2v2z"></path></g>
+      <g id="more-vert"><path d="M12 8c1.1 0 2-.9 2-2s-.9-2-2-2-2 .9-2 2 .9 2 2 2zm0 2c-1.1 0-2 .9-2 2s.9 2 2 2 2-.9 2-2-.9-2-2-2zm0 6c-1.1 0-2 .9-2 2s.9 2 2 2 2-.9 2-2-.9-2-2-2z"></path></g>
+      <g id="open-in-new"><path d="M19 19H5V5h7V3H5c-1.11 0-2 .9-2 2v14c0 1.1.89 2 2 2h14c1.1 0 2-.9 2-2v-7h-2v7zM14 3v2h3.59l-9.83 9.83 1.41 1.41L19 6.41V10h2V3h-7z"></path></g>
+      <g id="person"><path d="M12 12c2.21 0 4-1.79 4-4s-1.79-4-4-4-4 1.79-4 4 1.79 4 4 4zm0 2c-2.67 0-8 1.34-8 4v2h16v-2c0-2.66-5.33-4-8-4z"></path></g>
+      <g id="print"><path d="M19 8H5c-1.66 0-3 1.34-3 3v6h4v4h12v-4h4v-6c0-1.66-1.34-3-3-3zm-3 11H8v-5h8v5zm3-7c-.55 0-1-.45-1-1s.45-1 1-1 1 .45 1 1-.45 1-1 1zm-1-9H6v4h12V3z"></path></g>
+      <g id="search"><path d="M15.5 14h-.79l-.28-.27C15.41 12.59 16 11.11 16 9.5 16 5.91 13.09 3 9.5 3S3 5.91 3 9.5 5.91 16 9.5 16c1.61 0 3.09-.59 4.23-1.57l.27.28v.79l5 4.99L20.49 19l-4.99-5zm-6 0C7.01 14 5 11.99 5 9.5S7.01 5 9.5 5 14 7.01 14 9.5 11.99 14 9.5 14z"></path></g>
+      <g id="security"><path d="M12 1L3 5v6c0 5.55 3.84 10.74 9 12 5.16-1.26 9-6.45 9-12V5l-9-4zm0 10.99h7c-.53 4.12-3.28 7.79-7 8.94V12H5V6.3l7-3.11v8.8z"></path></g>
+
+      <g id="sim-card-alert"><path d="M18 2h-8L4.02 8 4 20c0 1.1.9 2 2 2h12c1.1 0 2-.9 2-2V4c0-1.1-.9-2-2-2zm-5 15h-2v-2h2v2zm0-4h-2V8h2v5z"></path></g>
+      <g id="sim-lock"><path d="M18 8h-1V6c0-2.76-2.24-5-5-5S7 3.24 7 6v2H6c-1.1 0-2 .9-2 2v10c0 1.1.9 2 2 2h12c1.1 0 2-.9 2-2V10c0-1.1-.9-2-2-2zm-6 9c-1.1 0-2-.9-2-2s.9-2 2-2 2 .9 2 2-.9 2-2 2zm3.1-9H8.9V6c0-1.71 1.39-3.1 3.1-3.1 1.71 0 3.1 1.39 3.1 3.1v2z"></path></g>
+      <g id="sms-connect"><path d="M20,2C21.1,2 22,2.9 22,4L22,16C22,17.1 21.1,18 20,18L6,18L2,22L2.01,4C2.01,2.9 2.9,2 4,2L20,2ZM8,8L4,12L8,16L8,13L14,13L14,11L8,11L8,8ZM19.666,7.872L16.038,4.372L16.038,6.997L10,6.997L10,9L16.038,9L16.038,11.372L19.666,7.872Z"></path></g>
+
+      <g id="settings_icon"><path d="M19.43 12.98c.04-.32.07-.64.07-.98s-.03-.66-.07-.98l2.11-1.65c.19-.15.24-.42.12-.64l-2-3.46c-.12-.22-.39-.3-.61-.22l-2.49 1c-.52-.4-1.08-.73-1.69-.98l-.38-2.65C14.46 2.18 14.25 2 14 2h-4c-.25 0-.46.18-.49.42l-.38 2.65c-.61.25-1.17.59-1.69.98l-2.49-1c-.23-.09-.49 0-.61.22l-2 3.46c-.13.22-.07.49.12.64l2.11 1.65c-.04.32-.07.65-.07.98s.03.66.07.98l-2.11 1.65c-.19.15-.24.42-.12.64l2 3.46c.12.22.39.3.61.22l2.49-1c.52.4 1.08.73 1.69.98l.38 2.65c.03.24.24.42.49.42h4c.25 0 .46-.18.49-.42l.38-2.65c.61-.25 1.17-.59 1.69-.98l2.49 1c.23.09.49 0 .61-.22l2-3.46c.12-.22.07-.49-.12-.64l-2.11-1.65zM12 15.5c-1.93 0-3.5-1.57-3.5-3.5s1.57-3.5 3.5-3.5 3.5 1.57 3.5 3.5-1.57 3.5-3.5 3.5z"></path></g>
+      <g id="star"><path d="M12 17.27L18.18 21l-1.64-7.03L22 9.24l-7.19-.61L12 2 9.19 8.63 2 9.24l5.46 4.73L5.82 21z"></path></g>
+      <g id="supervisor-account" viewBox="0 0 48 48"><path d="M0 0h48v48H0z" fill="none"></path><path d="M33 24c2.76 0 4.98-2.24 4.98-5s-2.22-5-4.98-5c-2.76 0-5 2.24-5 5s2.24 5 5 5zm-15-2c3.31 0 5.98-2.69 5.98-6s-2.67-6-5.98-6c-3.31 0-6 2.69-6 6s2.69 6 6 6zm15 6c-3.67 0-11 1.84-11 5.5V38h22v-4.5c0-3.66-7.33-5.5-11-5.5zm-15-2c-4.67 0-14 2.34-14 7v5h14v-4.5c0-1.7.67-4.67 4.74-6.94C21 26.19 19.31 26 18 26z"></path></g>
+      <g id="sync"><path d="M12 4V1L8 5l4 4V6c3.31 0 6 2.69 6 6 0 1.01-.25 1.97-.7 2.8l1.46 1.46C19.54 15.03 20 13.57 20 12c0-4.42-3.58-8-8-8zm0 14c-3.31 0-6-2.69-6-6 0-1.01.25-1.97.7-2.8L5.24 7.74C4.46 8.97 4 10.43 4 12c0 4.42 3.58 8 8 8v3l4-4-4-4v3z"></path></g>
+      <g id="warning"><path d="M1 21h22L12 2 1 21zm12-3h-2v-2h2v2zm0-4h-2v-4h2v4z"></path></g>
+    </defs>
+  </svg>
+</iron-iconset-svg>
+<dom-module id="cr-hidden-style" assetpath="chrome://resources/cr_elements/" css-build="shadow">
+  <template>
+    <style scope="cr-hidden-style">[hidden] {
+  display: none !important;
+}
+
+</style>
+  </template>
+</dom-module>
+<dom-module id="cr-shared-style" assetpath="chrome://resources/cr_elements/" css-build="shadow">
+  <template>
+    <style include="cr-hidden-style cr-icons" scope="cr-shared-style">[actionable] {
+  cursor: var(--cr-actionable_-_cursor);
+}
+
+.subpage-arrow, .icon-external {
+  display: none;
+}
+
+[actionable] :-webkit-any(.subpage-arrow, .icon-external), [actionable]:-webkit-any(.subpage-arrow, .icon-external) {
+  display: block;
+}
+
+.hr {
+  border-top: var(--cr-separator-line);
+}
+
+iron-list.cr-separators > *:not([first]) {
+  border-top: var(--cr-separator-line);
+}
+
+[scrollable] {
+  border-color: transparent;
+        border-style: solid;
+        border-width: 1px 0;
+        overflow-y: auto;
+}
+
+[scrollable].is-scrolled {
+  border-top-color: var(--google-grey-300);
+}
+
+[scrollable].can-scroll:not(.scrolled-to-bottom) {
+  border-bottom-color: var(--google-grey-300);
+}
+
+[scrollable] iron-list > :not(.no-outline):focus {
+  ;
+        background-color: var(--cr-selectable-focus_-_background-color); outline: var(--cr-selectable-focus_-_outline);
+}
+
+.scroll-container {
+  display: flex;
+        flex-direction: column;
+        min-height: 1px;
+}
+
+[selectable]:not(paper-radio-group):focus, [selectable]:not(paper-radio-group) > :focus {
+  background-color: var(--cr-selectable-focus_-_background-color); outline: var(--cr-selectable-focus_-_outline);
+}
+
+[selectable]:not(paper-radio-group) > * {
+  cursor: var(--cr-actionable_-_cursor);
+}
+
+#cr-container-shadow {
+  box-shadow: var(--cr-container-shadow_-_box-shadow); height: var(--cr-container-shadow_-_height); left: var(--cr-container-shadow_-_left); margin-bottom: var(--cr-container-shadow_-_margin-bottom); opacity: var(--cr-container-shadow_-_opacity); pointer-events: var(--cr-container-shadow_-_pointer-events); position: var(--cr-container-shadow_-_position); right: var(--cr-container-shadow_-_right); top: var(--cr-container-shadow_-_top); transition: var(--cr-container-shadow_-_transition); z-index: var(--cr-container-shadow_-_z-index);
+}
+
+#cr-container-shadow.has-shadow {
+  opacity: var(--cr-container-shadow-max-opacity);
+}
+
+</style>
+  </template>
+</dom-module>
+<dom-module id="paper-ripple" assetpath="chrome://resources/polymer/v1_0/paper-ripple/" css-build="shadow">
+
+  <template>
+    <style scope="paper-ripple">:host {
+  border-radius: inherit;
+        bottom: 0;
+        display: block;
+        left: 0;
+        overflow: hidden;
+        pointer-events: none;
+        position: absolute;
+        right: 0;
+        top: 0;
+        
+        transform: translate3d(0, 0, 0);
+}
+
+.ripple {
+  background-color: currentcolor;
+        left: 0;
+        opacity: var(--paper-ripple-opacity, 0.25);
+        pointer-events: none;
+        position: absolute;
+        will-change: height, transform, width;
+}
+
+.ripple, :host(.circle) {
+  border-radius: 50%;
+}
+
+</style>
+  </template>
+</dom-module>
+<dom-module id="paper-icon-button-light" assetpath="chrome://resources/polymer/v1_0/paper-icon-button/" css-build="shadow">
+  <template strip-whitespace="">
+    <style scope="paper-icon-button-light">:host {
+  display: inline-block;
+        position: relative;
+        width: 24px;
+        height: 24px;
+}
+
+paper-ripple {
+  opacity: 0.6;
+        color: currentColor;
+        ;
+}
+
+:host > ::content> button {
+  position: relative;
+        width: 100%;
+        height: 100%;
+        margin: 0;
+        padding: 0;
+        background: none;
+        border: none;
+        outline: none;
+        vertical-align: middle;
+        color: inherit;
+        cursor: pointer;
+        
+        -webkit-tap-highlight-color: rgba(0, 0, 0, 0);
+        -webkit-tap-highlight-color: transparent;
+}
+
+:host > ::content> button[disabled] {
+  color: #9b9b9b;
+        pointer-events: none;
+        cursor: auto;
+}
+
+</style>
+    <slot></slot>
+  </template>
+
+  </dom-module>
+<custom-style>
+  <style is="custom-style" css-build="shadow">[hidden] {
+  display: none !important;
+}
+
+</style>
+</custom-style>
+
+<custom-style>
+  <style is="custom-style" css-build="shadow">html {
+  --layout_-_display:  flex;;
+
+      --layout-inline_-_display:  inline-flex;;
+
+      --layout-horizontal_-_display:  var(--layout_-_display); --layout-horizontal_-_flex-direction:  row;;
+
+      --layout-horizontal-reverse_-_display:  var(--layout_-_display); --layout-horizontal-reverse_-_flex-direction:  row-reverse;;
+
+      --layout-vertical_-_display:  var(--layout_-_display); --layout-vertical_-_flex-direction:  column;;
+
+      --layout-vertical-reverse_-_display:  var(--layout_-_display); --layout-vertical-reverse_-_flex-direction:  column-reverse;;
+
+      --layout-wrap_-_flex-wrap:  wrap;;
+
+      --layout-wrap-reverse_-_flex-wrap:  wrap-reverse;;
+
+      --layout-flex-auto_-_flex:  1 1 auto;;
+
+      --layout-flex-none_-_flex:  none;;
+
+      --layout-flex_-_flex:  1; --layout-flex_-_flex-basis:  0.000000001px;;
+
+      --layout-flex-2_-_flex:  2;;
+
+      --layout-flex-3_-_flex:  3;;
+
+      --layout-flex-4_-_flex:  4;;
+
+      --layout-flex-5_-_flex:  5;;
+
+      --layout-flex-6_-_flex:  6;;
+
+      --layout-flex-7_-_flex:  7;;
+
+      --layout-flex-8_-_flex:  8;;
+
+      --layout-flex-9_-_flex:  9;;
+
+      --layout-flex-10_-_flex:  10;;
+
+      --layout-flex-11_-_flex:  11;;
+
+      --layout-flex-12_-_flex:  12;;
+
+      
+
+      --layout-start_-_align-items:  flex-start;;
+
+      --layout-center_-_align-items:  center;;
+
+      --layout-end_-_align-items:  flex-end;;
+
+      --layout-baseline_-_align-items:  baseline;;
+
+      
+
+      --layout-start-justified_-_justify-content:  flex-start;;
+
+      --layout-center-justified_-_justify-content:  center;;
+
+      --layout-end-justified_-_justify-content:  flex-end;;
+
+      --layout-around-justified_-_justify-content:  space-around;;
+
+      --layout-justified_-_justify-content:  space-between;;
+
+      --layout-center-center_-_align-items:  var(--layout-center_-_align-items); --layout-center-center_-_justify-content:  var(--layout-center-justified_-_justify-content);;
+
+      
+
+      --layout-self-start_-_align-self:  flex-start;;
+
+      --layout-self-center_-_align-self:  center;;
+
+      --layout-self-end_-_align-self:  flex-end;;
+
+      --layout-self-stretch_-_align-self:  stretch;;
+
+      --layout-self-baseline_-_align-self:  baseline;;
+
+      
+
+      --layout-start-aligned_-_align-content:  flex-start;;
+
+      --layout-end-aligned_-_align-content:  flex-end;;
+
+      --layout-center-aligned_-_align-content:  center;;
+
+      --layout-between-aligned_-_align-content:  space-between;;
+
+      --layout-around-aligned_-_align-content:  space-around;;
+
+      
+
+      --layout-block_-_display:  block;;
+
+      --layout-invisible_-_visibility:  hidden !important;;
+
+      --layout-relative_-_position:  relative;;
+
+      --layout-fit_-_position:  absolute; --layout-fit_-_top:  0; --layout-fit_-_right:  0; --layout-fit_-_bottom:  0; --layout-fit_-_left:  0;;
+
+      --layout-scroll_-_-webkit-overflow-scrolling:  touch; --layout-scroll_-_overflow:  auto;;
+
+      --layout-fullbleed_-_margin:  0; --layout-fullbleed_-_height:  100vh;;
+
+      
+
+      --layout-fixed-top_-_position:  fixed; --layout-fixed-top_-_top:  0; --layout-fixed-top_-_left:  0; --layout-fixed-top_-_right:  0;;
+
+      --layout-fixed-right_-_position:  fixed; --layout-fixed-right_-_top:  0; --layout-fixed-right_-_right:  0; --layout-fixed-right_-_bottom:  0;;
+
+      --layout-fixed-bottom_-_position:  fixed; --layout-fixed-bottom_-_right:  0; --layout-fixed-bottom_-_bottom:  0; --layout-fixed-bottom_-_left:  0;;
+
+      --layout-fixed-left_-_position:  fixed; --layout-fixed-left_-_top:  0; --layout-fixed-left_-_bottom:  0; --layout-fixed-left_-_left:  0;;
+}
+
+</style>
+</custom-style>
+<dom-module id="iron-icon" assetpath="chrome://resources/polymer/v1_0/iron-icon/" css-build="shadow">
+  <template>
+    <style scope="iron-icon">:host {
+  display: var(--layout-inline_-_display);
+        align-items: var(--layout-center-center_-_align-items); justify-content: var(--layout-center-center_-_justify-content);
+        position: relative;
+
+        vertical-align: middle;
+
+        fill: var(--iron-icon-fill-color, currentcolor);
+        stroke: var(--iron-icon-stroke-color, none);
+
+        width: var(--iron-icon-width, 24px);
+        height: var(--iron-icon-height, 24px);
+        ;
+}
+
+:host([hidden]) {
+  display: none;
+}
+
+</style>
+  </template>
+
+  </dom-module>
+<custom-style>
+  <style is="custom-style" css-build="shadow">html {
+  --primary-text-color: var(--light-theme-text-color);
+      --primary-background-color: var(--light-theme-background-color);
+      --secondary-text-color: var(--light-theme-secondary-color);
+      --disabled-text-color: var(--light-theme-disabled-color);
+      --divider-color: var(--light-theme-divider-color);
+      --error-color: var(--paper-deep-orange-a700);
+
+      
+      --primary-color: var(--paper-indigo-500);
+      --light-primary-color: var(--paper-indigo-100);
+      --dark-primary-color: var(--paper-indigo-700);
+
+      --accent-color: var(--paper-pink-a200);
+      --light-accent-color: var(--paper-pink-a100);
+      --dark-accent-color: var(--paper-pink-a400);
+
+
+      
+      --light-theme-background-color: #ffffff;
+      --light-theme-base-color: #000000;
+      --light-theme-text-color: var(--paper-grey-900);
+      --light-theme-secondary-color: #737373;  
+      --light-theme-disabled-color: #9b9b9b;  
+      --light-theme-divider-color: #dbdbdb;
+
+      
+      --dark-theme-background-color: var(--paper-grey-900);
+      --dark-theme-base-color: #ffffff;
+      --dark-theme-text-color: #ffffff;
+      --dark-theme-secondary-color: #bcbcbc;  
+      --dark-theme-disabled-color: #646464;  
+      --dark-theme-divider-color: #3c3c3c;
+
+      
+      --text-primary-color: var(--dark-theme-text-color);
+      --default-primary-color: var(--primary-color);
+}
+
+</style>
+</custom-style>
+<dom-module id="paper-icon-button" assetpath="chrome://resources/polymer/v1_0/paper-icon-button/" css-build="shadow">
+  <template strip-whitespace="">
+    <style scope="paper-icon-button">:host {
+  display: inline-block;
+        position: relative;
+        padding: 8px;
+        outline: none;
+        user-select: none;
+        cursor: pointer;
+        z-index: 0;
+        line-height: 1;
+
+        width: 40px;
+        height: 40px;
+
+        
+        -webkit-tap-highlight-color: rgba(0, 0, 0, 0);
+        -webkit-tap-highlight-color: transparent;
+
+        
+        box-sizing: border-box !important;
+
+        ;
+}
+
+:host #ink {
+  color: var(--paper-icon-button-ink-color, var(--primary-text-color));
+        opacity: 0.6;
+}
+
+:host([disabled]) {
+  color: var(--paper-icon-button-disabled-text, var(--disabled-text-color));
+        pointer-events: none;
+        cursor: auto;
+
+        ;
+}
+
+:host([hidden]) {
+  display: none !important;
+}
+
+:host(:hover) {
+  ;
+}
+
+iron-icon {
+  --iron-icon-width: 100%;
+        --iron-icon-height: 100%;
+}
+
+</style>
+
+    <iron-icon id="icon" src="[[src]]" icon="[[icon]]" alt$="[[alt]]"></iron-icon>
+  </template>
+
+  </dom-module>
+<dom-module id="paper-spinner-styles" assetpath="chrome://resources/polymer/v1_0/paper-spinner/" css-build="shadow">
+  <template>
+    <style scope="paper-spinner-styles">:host {
+  display: inline-block;
+        position: relative;
+        width: 28px;
+        height: 28px;
+
+        
+        --paper-spinner-container-rotation-duration: 1568ms;
+
+        
+        --paper-spinner-expand-contract-duration: 1333ms;
+
+        
+        --paper-spinner-full-cycle-duration: 5332ms;
+
+        
+        --paper-spinner-cooldown-duration: 400ms;
+}
+
+#spinnerContainer {
+  width: 100%;
+        height: 100%;
+
+        
+        direction: ltr;
+}
+
+#spinnerContainer.active {
+  animation: container-rotate var(--paper-spinner-container-rotation-duration) linear infinite;
+}
+
+@-webkit-keyframes container-rotate {
+to {
+  -webkit-transform: rotate(360deg)
+}
+
+}
+
+@keyframes container-rotate {
+to {
+  transform: rotate(360deg)
+}
+
+}
+
+.spinner-layer {
+  position: absolute;
+        width: 100%;
+        height: 100%;
+        opacity: 0;
+        white-space: nowrap;
+        border-color: var(--paper-spinner-color, var(--google-blue-500));
+}
+
+.layer-1 {
+  border-color: var(--paper-spinner-layer-1-color, var(--google-blue-500));
+}
+
+.layer-2 {
+  border-color: var(--paper-spinner-layer-2-color, var(--google-red-500));
+}
+
+.layer-3 {
+  border-color: var(--paper-spinner-layer-3-color, var(--google-yellow-500));
+}
+
+.layer-4 {
+  border-color: var(--paper-spinner-layer-4-color, var(--google-green-500));
+}
+
+.active .spinner-layer {
+  animation-name: fill-unfill-rotate;
+        animation-duration: var(--paper-spinner-full-cycle-duration);
+        animation-timing-function: cubic-bezier(0.4, 0.0, 0.2, 1);
+        animation-iteration-count: infinite;
+        opacity: 1;
+}
+
+.active .spinner-layer.layer-1 {
+  animation-name: fill-unfill-rotate, layer-1-fade-in-out;
+}
+
+.active .spinner-layer.layer-2 {
+  animation-name: fill-unfill-rotate, layer-2-fade-in-out;
+}
+
+.active .spinner-layer.layer-3 {
+  animation-name: fill-unfill-rotate, layer-3-fade-in-out;
+}
+
+.active .spinner-layer.layer-4 {
+  animation-name: fill-unfill-rotate, layer-4-fade-in-out;
+}
+
+@-webkit-keyframes fill-unfill-rotate {
+12.5% {
+  -webkit-transform: rotate(135deg)
+}
+
+25% {
+  -webkit-transform: rotate(270deg)
+}
+
+37.5% {
+  -webkit-transform: rotate(405deg)
+}
+
+50% {
+  -webkit-transform: rotate(540deg)
+}
+
+62.5% {
+  -webkit-transform: rotate(675deg)
+}
+
+75% {
+  -webkit-transform: rotate(810deg)
+}
+
+87.5% {
+  -webkit-transform: rotate(945deg)
+}
+
+to {
+  -webkit-transform: rotate(1080deg)
+}
+
+}
+
+@keyframes fill-unfill-rotate {
+12.5% {
+  transform: rotate(135deg)
+}
+
+25% {
+  transform: rotate(270deg)
+}
+
+37.5% {
+  transform: rotate(405deg)
+}
+
+50% {
+  transform: rotate(540deg)
+}
+
+62.5% {
+  transform: rotate(675deg)
+}
+
+75% {
+  transform: rotate(810deg)
+}
+
+87.5% {
+  transform: rotate(945deg)
+}
+
+to {
+  transform: rotate(1080deg)
+}
+
+}
+
+@-webkit-keyframes layer-1-fade-in-out {
+0% {
+  opacity: 1
+}
+
+25% {
+  opacity: 1
+}
+
+26% {
+  opacity: 0
+}
+
+89% {
+  opacity: 0
+}
+
+90% {
+  opacity: 1
+}
+
+to {
+  opacity: 1
+}
+
+}
+
+@keyframes layer-1-fade-in-out {
+0% {
+  opacity: 1
+}
+
+25% {
+  opacity: 1
+}
+
+26% {
+  opacity: 0
+}
+
+89% {
+  opacity: 0
+}
+
+90% {
+  opacity: 1
+}
+
+to {
+  opacity: 1
+}
+
+}
+
+@-webkit-keyframes layer-2-fade-in-out {
+0% {
+  opacity: 0
+}
+
+15% {
+  opacity: 0
+}
+
+25% {
+  opacity: 1
+}
+
+50% {
+  opacity: 1
+}
+
+51% {
+  opacity: 0
+}
+
+to {
+  opacity: 0
+}
+
+}
+
+@keyframes layer-2-fade-in-out {
+0% {
+  opacity: 0
+}
+
+15% {
+  opacity: 0
+}
+
+25% {
+  opacity: 1
+}
+
+50% {
+  opacity: 1
+}
+
+51% {
+  opacity: 0
+}
+
+to {
+  opacity: 0
+}
+
+}
+
+@-webkit-keyframes layer-3-fade-in-out {
+0% {
+  opacity: 0
+}
+
+40% {
+  opacity: 0
+}
+
+50% {
+  opacity: 1
+}
+
+75% {
+  opacity: 1
+}
+
+76% {
+  opacity: 0
+}
+
+to {
+  opacity: 0
+}
+
+}
+
+@keyframes layer-3-fade-in-out {
+0% {
+  opacity: 0
+}
+
+40% {
+  opacity: 0
+}
+
+50% {
+  opacity: 1
+}
+
+75% {
+  opacity: 1
+}
+
+76% {
+  opacity: 0
+}
+
+to {
+  opacity: 0
+}
+
+}
+
+@-webkit-keyframes layer-4-fade-in-out {
+0% {
+  opacity: 0
+}
+
+65% {
+  opacity: 0
+}
+
+75% {
+  opacity: 1
+}
+
+90% {
+  opacity: 1
+}
+
+to {
+  opacity: 0
+}
+
+}
+
+@keyframes layer-4-fade-in-out {
+0% {
+  opacity: 0
+}
+
+65% {
+  opacity: 0
+}
+
+75% {
+  opacity: 1
+}
+
+90% {
+  opacity: 1
+}
+
+to {
+  opacity: 0
+}
+
+}
+
+.circle-clipper {
+  display: inline-block;
+        position: relative;
+        width: 50%;
+        height: 100%;
+        overflow: hidden;
+        border-color: inherit;
+}
+
+.spinner-layer::after {
+  left: 45%;
+        width: 10%;
+        border-top-style: solid;
+}
+
+.spinner-layer::after, .circle-clipper::after {
+  content: '';
+        box-sizing: border-box;
+        position: absolute;
+        top: 0;
+        border-width: var(--paper-spinner-stroke-width, 3px);
+        border-color: inherit;
+        border-radius: 50%;
+}
+
+.circle-clipper::after {
+  bottom: 0;
+        width: 200%;
+        border-style: solid;
+        border-bottom-color: transparent !important;
+}
+
+.circle-clipper.left::after {
+  left: 0;
+        border-right-color: transparent !important;
+        transform: rotate(129deg);
+}
+
+.circle-clipper.right::after {
+  left: -100%;
+        border-left-color: transparent !important;
+        transform: rotate(-129deg);
+}
+
+.active .gap-patch::after, .active .circle-clipper::after {
+  animation-duration: var(--paper-spinner-expand-contract-duration);
+        animation-timing-function: cubic-bezier(0.4, 0.0, 0.2, 1);
+        animation-iteration-count: infinite;
+}
+
+.active .circle-clipper.left::after {
+  animation-name: left-spin;
+}
+
+.active .circle-clipper.right::after {
+  animation-name: right-spin;
+}
+
+@-webkit-keyframes left-spin {
+0% {
+  -webkit-transform: rotate(130deg)
+}
+
+50% {
+  -webkit-transform: rotate(-5deg)
+}
+
+to {
+  -webkit-transform: rotate(130deg)
+}
+
+}
+
+@keyframes left-spin {
+0% {
+  transform: rotate(130deg)
+}
+
+50% {
+  transform: rotate(-5deg)
+}
+
+to {
+  transform: rotate(130deg)
+}
+
+}
+
+@-webkit-keyframes right-spin {
+0% {
+  -webkit-transform: rotate(-130deg)
+}
+
+50% {
+  -webkit-transform: rotate(5deg)
+}
+
+to {
+  -webkit-transform: rotate(-130deg)
+}
+
+}
+
+@keyframes right-spin {
+0% {
+  transform: rotate(-130deg)
+}
+
+50% {
+  transform: rotate(5deg)
+}
+
+to {
+  transform: rotate(-130deg)
+}
+
+}
+
+#spinnerContainer.cooldown {
+  animation: container-rotate var(--paper-spinner-container-rotation-duration) linear infinite, fade-out var(--paper-spinner-cooldown-duration) cubic-bezier(0.4, 0.0, 0.2, 1);
+}
+
+@-webkit-keyframes fade-out {
+0% {
+  opacity: 1
+}
+
+to {
+  opacity: 0
+}
+
+}
+
+@keyframes fade-out {
+0% {
+  opacity: 1
+}
+
+to {
+  opacity: 0
+}
+
+}
+
+</style>
+  </template>
+</dom-module>
+<dom-module id="paper-spinner-lite" assetpath="chrome://resources/polymer/v1_0/paper-spinner/" css-build="shadow">
+  <template strip-whitespace="">
+    <style include="paper-spinner-styles" scope="paper-spinner-lite"></style>
+
+    <div id="spinnerContainer" class-name="[[__computeContainerClasses(active, __coolingDown)]]" on-animationend="__reset" on-webkit-animation-end="__reset">
+      <div class="spinner-layer">
+        <div class="circle-clipper left"></div>
+        <div class="circle-clipper right"></div>
+      </div>
+    </div>
+  </template>
+
+  </dom-module>
+<dom-module id="cr-toolbar-search-field" assetpath="chrome://resources/cr_elements/cr_toolbar/" css-build="shadow">
+  <template>
+    <style include="cr-shared-style" scope="cr-toolbar-search-field">:host {
+  align-items: center;
+        display: flex;
+        height: 40px;
+        transition: background-color 150ms cubic-bezier(0.4, 0, 0.2, 1),
+            width 150ms cubic-bezier(0.4, 0, 0.2, 1);
+        width: 44px;
+}
+
+[hidden] {
+  display: none !important;
+}
+
+paper-icon-button-light, paper-icon-button {
+  height: 32px;
+        margin: 6px;
+        min-width: 32px;
+        padding: 6px;
+        width: 32px;
+}
+
+#icon {
+  transition: margin 150ms, opacity 200ms;
+}
+
+#prompt {
+  opacity: 0;
+}
+
+paper-spinner-lite {
+  height: var(--cr-icon-height-width_-_height); width: var(--cr-icon-height-width_-_width);
+        --paper-spinner-color: white;
+        margin: 0 6px;
+        opacity: 0;
+        padding: 6px;
+        position: absolute;
+}
+
+paper-spinner-lite[active] {
+  opacity: 1;
+}
+
+#prompt, paper-spinner-lite {
+  transition: opacity 200ms;
+}
+
+#searchTerm {
+  -webkit-font-smoothing: antialiased;
+        -webkit-margin-start: 2px;
+        flex: 1;
+        line-height: 185%;
+        position: relative;
+}
+
+label {
+  bottom: 0;
+        cursor: text;
+        left: 0;
+        overflow: hidden;
+        position: absolute;
+        right: 0;
+        top: 0;
+        white-space: nowrap;
+}
+
+:host([has-search-text]) label {
+  visibility: hidden;
+}
+
+input {
+  -webkit-appearance: none;
+        background: transparent;
+        border: none;
+        color: white;
+        font: inherit;
+        outline: none;
+        padding: 0;
+        position: relative;
+        width: 100%;
+}
+
+input[type='search']::-webkit-search-decoration, input[type='search']::-webkit-search-cancel-button, input[type='search']::-webkit-search-results-button {
+  -webkit-appearance: none;
+}
+
+:host(:not([narrow])) {
+  -webkit-padding-end: 0;
+        background: rgba(0, 0, 0, 0.22);
+        border-radius: 2px;
+        cursor: text;
+        width: var(--cr-toolbar-field-width, 680px);
+}
+
+:host(:not([narrow]):not([showing-search])) #icon, :host(:not([narrow])) #prompt {
+  opacity: 0.7;
+}
+
+:host([narrow]:not([showing-search])) #searchTerm {
+  display: none;
+}
+
+:host([showing-search][spinner-active]) #icon {
+  opacity: 0;
+}
+
+:host([narrow][showing-search]) {
+  width: 100%;
+}
+
+:host([narrow][showing-search]) #icon, :host([narrow][showing-search]) paper-spinner-lite {
+  -webkit-margin-start: 18px;
+}
+
+</style>
+    <template is="dom-if" id="spinnerTemplate">
+      <paper-spinner-lite active="[[isSpinnerShown_]]">
+      </paper-spinner-lite>
+    </template>
+    <paper-icon-button id="icon" icon="cr:search" title="[[label]]" tabindex$="[[computeIconTabIndex_(narrow)]]" aria-hidden$="[[computeIconAriaHidden_(narrow)]]">
+    </paper-icon-button>
+    <div id="searchTerm">
+      <label id="prompt" for="searchInput" aria-hidden="true">[[label]]</label>
+      <input id="searchInput" aria-labelledby="prompt" type="search" on-input="onSearchTermInput" on-search="onSearchTermSearch" on-keydown="onSearchTermKeydown_" on-focus="onInputFocus_" on-blur="onInputBlur_" incremental="" autofocus="" spellcheck="false">
+    </div>
+    <template is="dom-if" if="[[hasSearchText]]">
+      <paper-icon-button-light class="icon-cancel-toolbar">
+        <button id="clearSearch" title="[[clearLabel]]" on-tap="clearSearch_">
+        </button>
+      </paper-icon-button-light>
+    </template>
+  </template>
+  </dom-module>
+<dom-module id="cr-toolbar" assetpath="chrome://resources/cr_elements/cr_toolbar/" css-build="shadow">
+  <template>
+    <style include="cr-icons cr-hidden-style" scope="cr-toolbar">:host {
+  --cr-toolbar-height: 56px;
+        --paper-icon-button-ink-color: white;
+        align-items: center;
+        color: #fff;
+        display: flex;
+        height: var(--cr-toolbar-height);
+}
+
+h1 {
+  -webkit-margin-start: 6px;
+        -webkit-padding-end: 12px;
+        flex: 1;
+        font-size: 123%;
+        font-weight: 400;
+        letter-spacing: .25px;
+        line-height: normal;
+}
+
+#leftContent {
+  -webkit-margin-start: 12px;
+        position: relative;
+        transition: opacity 100ms;
+}
+
+#leftSpacer {
+  -webkit-margin-start: 6px;
+        align-items: center;
+        display: flex;
+}
+
+#menuButtonContainer {
+  height: 32px;
+        min-width: 32px;
+        padding: 6px 0;
+        width: 32px;
+}
+
+#centeredContent {
+  display: flex;
+        flex: 1 1 0;
+        justify-content: center;
+}
+
+#rightContent {
+  -webkit-margin-end: 12px;
+}
+
+:host([narrow]) #centeredContent {
+  justify-content: flex-end;
+}
+
+:host([has-overlay]) {
+  transition: visibility var(--cr-toolbar-overlay-animation-duration);
+        visibility: hidden;
+}
+
+:host([narrow][showing-search_]) #leftContent {
+  opacity: 0;
+        position: absolute;
+}
+
+:host(:not([narrow])) #leftContent {
+  flex: 1 1 var(--cr-toolbar-field-margin, 0);
+}
+
+:host(:not([narrow])) #rightContent {
+  flex: 1 1 0;
+        text-align: end;
+}
+
+#menuPromo {
+  -webkit-padding-end: 12px;
+        -webkit-padding-start: 8px;
+        align-items: center;
+        background: #616161;
+        border-radius: 2px;
+        color: white;
+        display: flex;
+        font-size: 92.3%;
+        font-weight: 500;
+        opacity: 0;
+        padding-bottom: 6px;
+        padding-top: 6px;
+        position: absolute;
+        top: var(--cr-toolbar-height);
+        white-space: nowrap;
+        z-index: 2;
+}
+
+#menuPromo::before {
+  background: inherit;
+        
+        clip-path: polygon(0 105%, 100% 105%, 50% 0);
+        content: '';
+        display: block;
+        height: 6px;
+        left: 10px;
+        position: absolute;
+        top: -6px;
+        width: 12px;
+}
+
+:host-context([dir=rtl]) #menuPromo::before {
+  left: auto;
+        right: 10px;
+}
+
+#closePromo {
+  -webkit-appearance: none;
+        -webkit-margin-start: 12px;
+        background: none;
+        border: none;
+        color: inherit;
+        font-size: 20px;  
+        line-height: 20px;
+        padding: 0;
+        width: 20px;
+}
+
+</style>
+    <div id="leftContent">
+      <div id="leftSpacer">
+        <template is="dom-if" if="[[showMenu]]" restamp="">
+          <paper-icon-button-light id="menuButtonContainer" class="icon-menu-white no-overlap">
+            <button id="menuButton" on-tap="onMenuTap_" title="[[titleIfNotShowMenuPromo_(menuLabel, showMenuPromo)]]" aria-label$="[[menuLabel]]">
+            </button>
+          </paper-icon-button-light>
+          <template is="dom-if" if="[[showMenuPromo]]">
+            <div id="menuPromo" role="tooltip">
+              [[menuPromo]]
+              <button id="closePromo" on-tap="onClosePromoTap_" aria-label$="[[closeMenuPromo]]">✕</button>
+            
+          </div></template>
+        </template>
+        <h1>[[pageName]]</h1>
+      </div>
+    </div>
+
+    <div id="centeredContent" hidden$="[[!showSearch]]">
+      <cr-toolbar-search-field id="search" narrow="[[narrow]]" label="[[searchPrompt]]" clear-label="[[clearLabel]]" spinner-active="[[spinnerActive]]" showing-search="{{showingSearch_}}">
+      </cr-toolbar-search-field>
+      <iron-media-query query="(max-width: [[narrowThreshold]]px)" query-matches="{{narrow}}">
+      </iron-media-query>
+    </div>
+
+    <div id="rightContent">
+      <slot></slot>
+    </div>
+  </template>
+  </dom-module>
+<dom-module id="cr-link-row" assetpath="chrome://resources/cr_elements/cr_link_row/" css-build="shadow">
+  <template strip-whitespace="">
+    <style include="cr-hidden-style cr-icons" scope="cr-link-row">:host {
+  align-items: center;
+        align-self: stretch;
+        display: block;
+        flex: 1;
+}
+
+:host > button {
+  background: none;
+        border: none;
+        color: inherit;
+        cursor: pointer;
+        display: flex;
+        font-family: inherit;
+        font-size: 100%;  
+        line-height: 154%;  
+        margin: 0;
+        min-height: var(--cr-section-min-height);
+        outline: none;
+        padding: 0;
+        width: 100%;
+}
+
+:host(:not([embedded])) > button {
+  padding: 0 var(--cr-section-padding);
+}
+
+:host([disabled]) {
+  color: var(--paper-grey-500);
+        cursor: auto;
+        pointer-events: none;
+}
+
+#startIcon {
+  -webkit-padding-end: var(--cr-icon-button-margin-start);
+        display: flex;
+        flex-shrink: 0;
+        width: var(--cr-link-row-icon-width, var(--cr-icon-size));
+}
+
+#icon {
+  position: relative;
+}
+
+#label, #subLabel {
+  display: flex;
+}
+
+#labelWrapper {
+  flex: 1;
+        flex-basis: 0.000000001px;
+        text-align: start;
+}
+
+#outer {
+  align-items: center;
+        display: flex;
+        min-height: var(--cr-section-two-line-min-height);
+        width: 100%;
+}
+
+#outer[noSubLabel] {
+  min-height: var(--cr-section-min-height);
+}
+
+paper-ripple {
+  opacity: 0.6;
+}
+
+#subLabel {
+  color: var(--cr-secondary-text_-_color); font-weight: var(--cr-secondary-text_-_font-weight);
+}
+
+</style>
+    <button disabled="[[disabled]]">
+      <div id="outer" nosublabel$="[[!subLabel]]">
+        <iron-icon id="startIcon" icon="[[startIcon]]" hidden="[[!startIcon]]" aria-hidden="true">
+        </iron-icon>
+        <div id="labelWrapper" hidden="[[!label]]">
+          <div id="label" class="label">[[label]]</div>
+          <div id="subLabel" class="secondary label">[[subLabel]]</div>
+        </div>
+        <slot></slot>
+        <div id="icon" class$="cr-icon [[iconClass]]" aria-hidden="true">
+        </div>
+      </div>
+    </button>
+  </template>
+  </dom-module>
+<dom-module id="cr-toggle" assetpath="chrome://resources/cr_elements/cr_toggle/" css-build="shadow">
+  <template>
+    <style scope="cr-toggle">:host {
+  cursor: pointer;
+        display: block;
+        outline: none;
+}
+
+:host([disabled]) {
+  cursor: initial;
+        opacity: var(--cr-disabled-opacity);
+        pointer-events: none;
+}
+
+button {
+  background: none;
+        border: none;
+        cursor: inherit;
+        display: block;
+        outline: inherit;
+        padding: 0;
+        position: relative;
+        width: 34px;
+        z-index: 0;
+}
+
+#bar {
+  background-color:
+          var(--cr-toggle-unchecked-bar-color, var(--google-grey-400));
+        border-radius: 8px;
+        height: 12px;
+        left: 3px;
+        position: absolute;
+        top: 2px;
+        transition: background-color linear 80ms;
+        width: 28px;
+        z-index: 0;
+}
+
+:host([checked]) #bar {
+  background-color: var(
+            --cr-toggle-checked-bar-color, var(--google-blue-600));
+        opacity: 0.5;
+}
+
+#knob {
+  background-color: var(--cr-toggle-unchecked-button-color, white);
+        border-radius: 50%;
+        box-shadow: 0 1px 3px 0 rgba(0, 0, 0, 0.4);
+        display: block;
+        height: 16px;
+        position: relative;
+        transition: transform linear 80ms, background-color linear 80ms;
+        width: 16px;
+        z-index: 1;
+}
+
+:host([checked]) #knob {
+  background-color: var(
+            --cr-toggle-checked-button-color, var(--google-blue-600));
+        transform: translate3d(18px, 0, 0);
+}
+
+:host-context([dir=rtl]):host([checked]) #knob {
+  transform: translate3d(-18px, 0, 0);
+}
+
+paper-ripple {
+  --paper-ripple-opacity: 0.15;
+        color: var(--cr-toggle-unchecked-ink-color, var(--google-grey-600));
+        height: 40px;
+        left: -12px;
+        pointer-events: none;
+        top: -12px;
+        transition: color linear 80ms;
+        width: 40px;
+}
+
+:host-context([dir=rtl]) paper-ripple {
+  left: auto;
+        right: -12px;
+}
+
+:host([checked]) paper-ripple {
+  --paper-ripple-opacity: 0.2;
+        color: var(--cr-toggle-checked-ink-color, var(--google-blue-600));
+}
+
+</style>
+    <button tabindex="-1" on-focus="onButtonFocus_">
+      <span id="bar"></span>
+      <span id="knob"></span>
+    </button>
+  </template>
+  </dom-module>
+<dom-module id="paper-button-style" assetpath="chrome://resources/cr_elements/" css-build="shadow">
+  <template>
+    <style scope="paper-button-style">paper-button {
+  --disabled-color: rgb(241, 243, 244);
+        
+        --paper-button-ink-color: var(--google-blue-600);
+        --paper-ripple-opacity: 0.1;
+        --text-or-bg-color: var(--google-blue-600);
+
+        border: 1px solid rgb(218, 220, 224);
+        border-radius: 4px;
+        color: var(--text-or-bg-color);
+        flex-shrink: 0;
+        font-weight: 500;
+        height: 32px;
+        margin: 0;
+        padding: 8px 16px;
+        text-decoration: none;
+        text-transform: none;
+}
+
+paper-button[animated] {
+  transition: none;
+}
+
+paper-button:not([raised]).keyboard-focus, paper-button:not([raised]).action-button.keyboard-focus {
+  box-shadow: 0 0 0 2px rgba(26, 115, 232, 0.4);
+        
+        font-weight: 500;
+}
+
+paper-button:not(.action-button):hover {
+  background-color: rgba(66, 133, 244, 0.04);
+        border-color: rgb(210, 227, 252);
+}
+
+paper-button:not(.action-button):active {
+  box-shadow:
+            0 1px 2px 0 rgba(60, 64, 67, 0.30),
+            0 3px 6px 2px rgba(60, 64, 67, 0.15);
+}
+
+paper-button.action-button:hover {
+  background-color: rgba(26, 115, 232, 0.9);
+        box-shadow:
+            0 1px 2px 0 var(--google-blue-500-opacity-30),
+            0 1px 3px 1px var(--google-blue-500-opacity-15);
+}
+
+paper-button.action-button:active {
+  box-shadow:
+            0 1px 2px 0 var(--google-blue-500-opacity-30),
+            0 3px 6px 2px var(--google-blue-500-opacity-15);
+}
+
+paper-button:not([raised]).action-button {
+  --paper-ripple-opacity: 0.32;
+        --paper-button-ink-color: white;
+        --google-blue-500-opacity-30: rgba(66, 133, 244, 0.3);
+        --google-blue-500-opacity-15: rgba(66, 133, 244, 0.15);
+        background-color: var(--text-or-bg-color);
+        border: none;
+        color: white;
+}
+
+paper-button:not([raised])[disabled] {
+  background-color: white;
+        border-color: var(--disabled-color);
+        color: rgb(128, 134, 139);
+}
+
+paper-button.action-button[disabled] {
+  background-color: var(--disabled-color);
+        border-color: transparent;
+}
+
+paper-button.cancel-button {
+  -webkit-margin-end: 8px;
+}
+
+paper-button.action-button, paper-button.cancel-button {
+  line-height: 154%;
+}
+
+</style>
+  </template>
+</dom-module>
+<dom-module id="paper-tooltip" assetpath="chrome://resources/polymer/v1_0/paper-tooltip/" css-build="shadow">
+  <template>
+    <style scope="paper-tooltip">:host {
+  display: block;
+        position: absolute;
+        outline: none;
+        z-index: 1002;
+        user-select: none;
+        cursor: default;
+}
+
+#tooltip {
+  display: block;
+        outline: none;
+        ;
+        font-size: 10px;
+        line-height: 1;
+
+        background-color: var(--paper-tooltip-background, #616161);
+        opacity: var(--paper-tooltip-opacity, 0.9);
+        color: var(--paper-tooltip-text-color, white);
+
+        padding: 8px;
+        border-radius: 2px;
+
+        font-size: var(--paper-tooltip_-_font-size, 10px); font-weight: var(--paper-tooltip_-_font-weight); max-width: var(--paper-tooltip_-_max-width); min-width: var(--paper-tooltip_-_min-width); padding: var(--paper-tooltip_-_padding, 8px);
+}
+
+.hidden {
+  display: none !important;
+}
+
+</style>
+
+    <div id="tooltip" class="hidden">
+      <slot></slot>
+    </div>
+  </template>
+
+  </dom-module>
+<dom-module id="cr-tooltip-icon" assetpath="chrome://resources/cr_elements/policy/" css-build="shadow">
+  <template>
+    <style scope="cr-tooltip-icon">:host {
+  display: flex;
+}
+
+paper-tooltip {
+  --paper-tooltip: var(--cr-tooltip);--paper-tooltip_-_font-size:  var(--cr-tooltip_-_font-size); --paper-tooltip_-_font-weight:  var(--cr-tooltip_-_font-weight); --paper-tooltip_-_max-width:  var(--cr-tooltip_-_max-width); --paper-tooltip_-_min-width:  var(--cr-tooltip_-_min-width); --paper-tooltip_-_padding:  var(--cr-tooltip_-_padding);;
+}
+
+iron-icon {
+  --iron-icon-width: var(--cr-icon-size);
+        --iron-icon-height: var(--cr-icon-size);
+}
+
+</style>
+    <iron-icon id="indicator" tabindex="0" aria-label$="[[iconAriaLabel]]" aria-describedby="tooltip" icon="[[iconClass]]"></iron-icon>
+    <paper-tooltip id="tooltip" for="indicator" position="top" fit-to-visible-bounds="">
+      [[tooltipText]]
+    </paper-tooltip>
+  </template>
+  </dom-module>
+<dom-module id="action-link" assetpath="chrome://resources/html/" css-build="shadow">
+  <template>
+    <style scope="action-link">[is='action-link'] {
+  cursor: var(--cr-actionable_-_cursor);
+        display: inline-block;
+        text-decoration: none;
+}
+
+[is='action-link'], [is='action-link']:active, [is='action-link']:hover, [is='action-link']:visited {
+  color: var(--google-blue-700);
+}
+
+[is='action-link'][disabled] {
+  color: var(--paper-grey-600);
+        cursor: default;
+        opacity: 0.65;
+        pointer-events: none;
+}
+
+[is='action-link'].no-outline {
+  outline: none;
+}
+
+</style>
+  </template>
+</dom-module>
+<dom-module id="md-select" assetpath="chrome://resources/html/" css-build="shadow">
+  <template>
+    <style scope="md-select">:host {
+  --md-select-side-padding: 8px;
+}
+
+.md-select {
+  --md-arrow-width: 0.9em;
+
+        -webkit-appearance: none;
+        
+        -webkit-padding-end: calc(var(--md-select-side-padding) +
+            var(--md-arrow-width) + 3px);
+        -webkit-padding-start: var(--md-select-side-padding);
+        background: url("chrome://resources/images/arrow_down.svg")
+            calc(100% - var(--md-select-side-padding))
+            center no-repeat;
+        background-color: var(--google-grey-refresh-100);
+        background-size: var(--md-arrow-width);
+        border: none;
+        border-radius: 4px;
+        color: var(--google-grey-900);
+        cursor: pointer;
+        font-family: inherit;
+        font-size: inherit;
+        line-height: inherit;
+        max-width: 100%;
+        outline: none;
+        padding-bottom: 6px;
+        padding-top: 6px;
+        width: var(--md-select-width, 200px);
+}
+
+.md-select option, .md-select optgroup {
+  background-color: white;
+}
+
+.md-select[disabled] {
+  opacity: var(--cr-disabled-opacity);
+        pointer-events: none;
+}
+
+.md-select:focus {
+  box-shadow: 0 0 0 2px rgba(26, 115, 232, 0.4);
+}
+
+.md-select:active {
+  box-shadow: none;
+}
+
+:host-context([dir=rtl]) .md-select {
+  background-position-x: var(--md-select-side-padding);
+}
+
+</style>
+  </template>
+</dom-module>
+<dom-module id="iron-flex" assetpath="chrome://resources/polymer/v1_0/iron-flex-layout/" css-build="shadow">
+  <template>
+    <style scope="iron-flex">.layout.horizontal, .layout.vertical {
+  display: flex;
+}
+
+.layout.inline {
+  display: inline-flex;
+}
+
+.layout.horizontal {
+  flex-direction: row;
+}
+
+.layout.vertical {
+  flex-direction: column;
+}
+
+.layout.wrap {
+  flex-wrap: wrap;
+}
+
+.layout.no-wrap {
+  flex-wrap: nowrap;
+}
+
+.layout.center, .layout.center-center {
+  align-items: center;
+}
+
+.layout.center-justified, .layout.center-center {
+  justify-content: center;
+}
+
+.flex {
+  flex: 1;
+        flex-basis: 0.000000001px;
+}
+
+.flex-auto {
+  flex: 1 1 auto;
+}
+
+.flex-none {
+  flex: none;
+}
+
+</style>
+  </template>
+</dom-module>
+
+<dom-module id="iron-flex-reverse" assetpath="chrome://resources/polymer/v1_0/iron-flex-layout/" css-build="shadow">
+  <template>
+    <style scope="iron-flex-reverse">.layout.horizontal-reverse, .layout.vertical-reverse {
+  display: flex;
+}
+
+.layout.horizontal-reverse {
+  flex-direction: row-reverse;
+}
+
+.layout.vertical-reverse {
+  flex-direction: column-reverse;
+}
+
+.layout.wrap-reverse {
+  flex-wrap: wrap-reverse;
+}
+
+</style>
+  </template>
+</dom-module>
+
+<dom-module id="iron-flex-alignment" assetpath="chrome://resources/polymer/v1_0/iron-flex-layout/" css-build="shadow">
+  <template>
+    <style scope="iron-flex-alignment">.layout.start {
+  align-items: flex-start;
+}
+
+.layout.center, .layout.center-center {
+  align-items: center;
+}
+
+.layout.end {
+  align-items: flex-end;
+}
+
+.layout.baseline {
+  align-items: baseline;
+}
+
+.layout.start-justified {
+  justify-content: flex-start;
+}
+
+.layout.center-justified, .layout.center-center {
+  justify-content: center;
+}
+
+.layout.end-justified {
+  justify-content: flex-end;
+}
+
+.layout.around-justified {
+  justify-content: space-around;
+}
+
+.layout.justified {
+  justify-content: space-between;
+}
+
+.self-start {
+  align-self: flex-start;
+}
+
+.self-center {
+  align-self: center;
+}
+
+.self-end {
+  align-self: flex-end;
+}
+
+.self-stretch {
+  align-self: stretch;
+}
+
+.self-baseline {
+  align-self: baseline;
+}
+
+.layout.start-aligned {
+  align-content: flex-start;
+}
+
+.layout.end-aligned {
+  align-content: flex-end;
+}
+
+.layout.center-aligned {
+  align-content: center;
+}
+
+.layout.between-aligned {
+  align-content: space-between;
+}
+
+.layout.around-aligned {
+  align-content: space-around;
+}
+
+</style>
+  </template>
+</dom-module>
+
+<dom-module id="iron-flex-factors" assetpath="chrome://resources/polymer/v1_0/iron-flex-layout/" css-build="shadow">
+  <template>
+    <style scope="iron-flex-factors">.flex, .flex-1 {
+  flex: 1;
+        flex-basis: 0.000000001px;
+}
+
+.flex-2 {
+  flex: 2;
+}
+
+.flex-3 {
+  flex: 3;
+}
+
+.flex-4 {
+  flex: 4;
+}
+
+.flex-5 {
+  flex: 5;
+}
+
+.flex-6 {
+  flex: 6;
+}
+
+.flex-7 {
+  flex: 7;
+}
+
+.flex-8 {
+  flex: 8;
+}
+
+.flex-9 {
+  flex: 9;
+}
+
+.flex-10 {
+  flex: 10;
+}
+
+.flex-11 {
+  flex: 11;
+}
+
+.flex-12 {
+  flex: 12;
+}
+
+</style>
+  </template>
+</dom-module>
+
+<dom-module id="iron-positioning" assetpath="chrome://resources/polymer/v1_0/iron-flex-layout/" css-build="shadow">
+  <template>
+    <style scope="iron-positioning">.block {
+  display: block;
+}
+
+[hidden] {
+  display: none !important;
+}
+
+.invisible {
+  visibility: hidden !important;
+}
+
+.relative {
+  position: relative;
+}
+
+.fit {
+  position: absolute;
+        top: 0;
+        right: 0;
+        bottom: 0;
+        left: 0;
+}
+
+body.fullbleed {
+  margin: 0;
+        height: 100vh;
+}
+
+.scroll {
+  -webkit-overflow-scrolling: touch;
+        overflow: auto;
+}
+
+.fixed-bottom, .fixed-left, .fixed-right, .fixed-top {
+  position: fixed;
+}
+
+.fixed-top {
+  top: 0;
+        left: 0;
+        right: 0;
+}
+
+.fixed-right {
+  top: 0;
+        right: 0;
+        bottom: 0;
+}
+
+.fixed-bottom {
+  right: 0;
+        bottom: 0;
+        left: 0;
+}
+
+.fixed-left {
+  top: 0;
+        bottom: 0;
+        left: 0;
+}
+
+</style>
+  </template>
+</dom-module>
+<script src="chrome://resources/js/load_time_data.js"></script>
+<script src="chrome://extensions/strings.js"></script>
+<dom-module id="extensions-toggle-row" assetpath="chrome://extensions/" css-build="shadow">
+  <template>
+    <style scope="extensions-toggle-row">:host {
+  align-items: var(--cr-section_-_align-items); border-top: var(--cr-section_-_border-top); display: var(--cr-section_-_display); min-height: var(--cr-section_-_min-height); padding: var(--cr-section_-_padding);
+        flex-direction: column;
+        padding-left: 0;
+        padding-right: 0;
+        touch-action: none;
+}
+
+input {
+  display: none;
+}
+
+label {
+  align-items: center;
+        box-sizing: border-box;
+        cursor: pointer;
+        display: flex;
+        flex: 1;
+        padding: 0 var(--cr-section-padding);
+        width: 100%;
+}
+
+cr-toggle {
+  display: inline-block;
+}
+
+:host ::content> * {
+  -webkit-margin-end: 20px;
+        flex: 1;
+}
+
+</style>
+    <label id="label">
+      <input id="native" type="checkbox" checked="[[checked]]" on-change="onNativeChange_" on-click="onNativeClick_">
+      <slot></slot>
+      <cr-toggle id="crToggle" checked="{{checked}}" aria-labelledby="label" on-change="onCrToggleChange_"></cr-toggle>
+    </label>
+  </template>
+  </dom-module>
+<dom-module id="extensions-detail-view" assetpath="chrome://extensions/" css-build="shadow">
+  <template>
+    <style include="iron-flex cr-shared-style cr-icons action-link md-select paper-button-style" scope="extensions-detail-view">:host {
+  --iron-icon-fill-color: var(--google-grey-refresh-700);
+        display: block;
+        height: 100%;
+}
+
+#enable-section {
+  margin-bottom: 8px;
+}
+
+#enable-section cr-tooltip-icon {
+  -webkit-margin-end: 20px;
+}
+
+#enable-section span {
+  color: var(--cr-secondary-text-color);
+        font-weight: 500;
+}
+
+#enable-section .enabled-text {
+  color: var(--google-blue-500);
+}
+
+#container {
+  height: 100%;
+        overflow: overlay;
+}
+
+#main {
+  box-shadow: var(--cr-card-elevation_-_box-shadow);
+        background-color: white;
+        margin: auto;
+        min-height: 100%;
+        padding-bottom: 64px;
+        width: var(--cr-toolbar-field-width);
+}
+
+#top-bar {
+  align-items: center;
+        display: flex;
+        height: 40px;
+        margin-bottom: 12px;
+        padding: 8px 12px 0;
+}
+
+#icon {
+  -webkit-margin-end: 12px;
+        -webkit-margin-start: 16px;
+        height: 24px;
+        width: 24px;
+}
+
+#name {
+  flex-grow: 1;
+        color: var(--cr-title-text_-_color); font-size: var(--cr-title-text_-_font-size); font-weight: var(--cr-title-text_-_font-weight);
+}
+
+#learn-more-link {
+  color: var(--google-blue-700);
+        text-decoration: none;
+}
+
+.three-line {
+  min-height: var(--cr-section-three-line-min-height);
+}
+
+.section {
+  align-items: var(--cr-section_-_align-items); border-top: var(--cr-section_-_border-top); display: var(--cr-section_-_display); min-height: var(--cr-section_-_min-height); padding: var(--cr-section_-_padding);
+}
+
+.section.block {
+  display: block;
+        padding-bottom: 16px;
+        padding-top: 16px;
+}
+
+.section.continuation {
+  border-top: none;
+}
+
+.section.control-line {
+  justify-content: space-between;
+}
+
+.section:first-child {
+  border: none;
+}
+
+.section-title {
+  margin-bottom: 12px;
+}
+
+.section-content {
+  color: var(--cr-secondary-text-color);
+}
+
+.mid-section-header {
+  color: var(--cr-primary-text-color);
+        margin-top: 12px;
+}
+
+.actionable {
+  cursor: pointer;
+}
+
+.inspectable-view {
+  color: var(--google-blue-700);
+        height: 20px;
+        width: auto;
+}
+
+.warning .action-button {
+  background: white;
+        color: var(--google-blue-500);
+}
+
+#reload-button {
+  color: var(--google-blue-500);
+}
+
+.warning span {
+  color: var(--google-red-700);
+        flex: 1;
+}
+
+.warning-icon {
+  --iron-icon-fill-color: var(--google-red-700);
+        -webkit-margin-end: 8px;
+        flex-shrink: 0;
+        height: 18px;
+        width: 18px;
+}
+
+ul {
+  -webkit-padding-start: 20px;
+        margin: 0;
+}
+
+#runtime-host-permissions-mode {
+  align-items: center;
+        display: flex;
+        justify-content: space-between;
+}
+
+#options-section .control-line:first-child {
+  border-top: var(--cr-separator-line);
+}
+
+#load-path {
+  word-break: break-all;
+}
+
+#load-path > a[is='action-link'] {
+  display: inline;
+}
+
+#size {
+  align-items: center;
+        display: flex;
+}
+
+paper-spinner-lite {
+  height: var(--cr-icon-height-width_-_height); width: var(--cr-icon-height-width_-_width);
+}
+
+</style>
+    <div id="container">
+      <div id="main">
+        <div id="top-bar">
+          <paper-icon-button-light class="icon-arrow-back no-overlap">
+            <button id="closeButton" aria-label="Back" on-click="onCloseButtonTap_"></button>
+          </paper-icon-button-light>
+          <img id="icon" src="[[data.iconUrl]]" alt$="[[appOrExtension(
+                  data.type,
+                  'App Icon',
+                  'Extension Icon')]]">
+          <span id="name">[[data.name]]</span>
+        </div>
+        <div class="section continuation control-line" id="enable-section">
+          <span class$="{{computeEnabledStyle_(data.state)}}">
+            [[computeEnabledText_(data.state, 'On',
+                'Off')]]
+          </span>
+          <div class="layout horizontal">
+            <cr-tooltip-icon hidden$="[[!data.controlledInfo]]" tooltip-text="[[data.controlledInfo.text]]" icon-class="[[getIndicatorIcon_(data.controlledInfo.type)]]" icon-aria-label="[[data.controlledInfo.type]]">
+            </cr-tooltip-icon>
+            <cr-toggle id="enable-toggle" aria-label$="[[appOrExtension(
+                    data.type,
+                    'App Enabled',
+                    'Extension Enabled')]]" aria-describedby="name" checked="[[isEnabled_(data.state)]]" on-change="onEnableChange_" disabled="[[!isEnableToggleEnabled_(data.*)]]">
+            </cr-toggle>
+          </div>
+        </div>
+        <div id="warnings" hidden$="[[!hasWarnings_(data.*)]]">
+          <div id="runtime-warnings" aria-describedby="a11yAssociation" hidden$="[[!data.runtimeWarnings.length]]" class="section continuation warning control-line">
+            <iron-icon class="warning-icon" icon="cr:error"></iron-icon>
+            <span>
+              <template is="dom-repeat" items="[[data.runtimeWarnings]]">
+                [[item]]
+              </template>
+            </span>
+            <paper-button id="reload-button" class="action-button" on-click="onReloadTap_">
+              Reload
+            </paper-button>
+          </div>
+          <div class="section continuation warning" id="suspicious-warning" hidden$="[[!data.disableReasons.suspiciousInstall]]">
+            <iron-icon class="warning-icon" icon="cr:warning"></iron-icon>
+            <span>
+              This extension is not listed in the Chrome Web Store and may have been added without your knowledge.
+              <a target="_blank" id="learn-more-link" href="https://support.google.com/chrome/?p=ui_remove_non_cws_extensions&amp;hl=en-US">
+                Learn more
+              </a>
+            </span>
+          </div>
+          <div class="section continuation warning control-line" id="corrupted-warning" hidden$="[[!data.disableReasons.corruptInstall]]">
+            <iron-icon class="warning-icon" icon="cr:warning"></iron-icon>
+            <span>This extension may have been corrupted.</span>
+            <paper-button id="repair-button" class="action-button" on-click="onRepairTap_">
+              Repair
+            </paper-button>
+          </div>
+          <div class="section continuation warning" id="blacklisted-warning" hidden$="[[!data.blacklistText]]">
+            <iron-icon class="warning-icon" icon="cr:warning"></iron-icon>
+            <span>[[data.blacklistText]]</span>
+          </div>
+          <div class="section continuation warning" id="update-required-warning" hidden$="[[!data.disableReasons.updateRequired]]">
+            <iron-icon class="warning-icon" icon="cr:warning"></iron-icon>
+            <span>This extension is outdated and disabled by enterprise policy. It might become enabled automatically when a newer version is available.</span>
+          </div>
+        </div>
+        <div class="section continuation block">
+          <div class="section-title">Description</div>
+          <div class="section-content" id="description">
+            [[getDescription_(data.description, 'No description provided')]]
+          </div>
+        </div>
+        <div class="section block">
+          <div class="section-title">Version</div>
+          <div class="section-content">[[data.version]]</div>
+        </div>
+        <div class="section block">
+          <div class="section-title">Size</div>
+          <div class="section-content" id="size">
+            <span>[[size_]]</span>
+            <paper-spinner-lite active="[[!size_]]" hidden="[[size_]]">
+            </paper-spinner-lite>
+          </div>
+        </div>
+        <div class="section block" id="id-section" hidden$="[[!inDevMode]]">
+          <div class="section-title">ID</div>
+          <div class="section-content">[[data.id]]</div>
+        </div>
+        <template is="dom-if" if="[[inDevMode]]">
+          <div class="section block" id="inspectable-views">
+            <div class="section-title">Inspect views</div>
+            <div class="section-content">
+              <ul id="inspect-views">
+                <li hidden="[[data.views.length]]">
+                  No active views
+                </li>
+                <template is="dom-repeat" items="[[data.views]]">
+                  <li>
+                    <a is="action-link" class="inspectable-view" on-click="onInspectTap_">
+                      [[computeInspectLabel_(item)]]
+                    </a>
+                  </li>
+                </template>
+              </ul>
+            </div>
+          </div>
+        </template>
+        <div class="section block">
+          <div class="section-title">Permissions</div>
+          <div class="section-content">
+            <span id="no-permissions" hidden$="[[hasPermissions_(data.*)]]">
+              This extension requires no special permissions
+            </span>
+            <ul id="permissions-list" hidden$="[[!data.permissions.simplePermissions.length]]">
+              <template is="dom-repeat" items="[[data.permissions.simplePermissions]]">
+                <li>
+                  [[item.message]]
+                  <ul hidden="[[!item.submessages.length]]">
+                    <template is="dom-repeat" items="[[item.submessages]]">
+                      <li>[[item]]</li>
+                    </template>
+                  </ul>
+                </li>
+              </template>
+            </ul>
+            <template is="dom-if" if="[[showRuntimeHostPermissions_(data.*)]]">
+              <div id="runtime-host-permissions">
+                <div id="runtime-host-permissions-mode">
+                  <div class="mid-section-header">
+                    Allow this extension to read and change all your data on websites you visit:
+                  </div>
+                  <select id="host-access" class="md-select" value="[[data.permissions.hostAccess]]" on-change="onHostAccessChanged_">
+                    <option value$="[[HostAccess_.ON_CLICK]]">
+                      On click
+                    </option>
+                    <option value$="[[HostAccess_.ON_SPECIFIC_SITES]]">
+                      On specific sites
+                    </option>
+                    <option value$="[[HostAccess_.ON_ALL_SITES]]">
+                      On all sites
+                    </option>
+                  </select>
+                </div>
+                <template is="dom-if" if="[[showSpecificSites_(data.*)]]">
+                  <div class="mid-section-header">Allowed sites</div>
+                  <ul id="runtime-hosts">
+                    <template is="dom-repeat" items="[[data.permissions.runtimeHostPermissions]]">
+                      <li>[[item]]</li>
+                    </template>
+                  </ul>
+                </template>
+              </div>
+            </template>
+          </div>
+        </div>
+        <template is="dom-if" if="[[hasDependentExtensions_(data.dependentExtensions.splices)]]">
+          <div class="section block">
+            <div class="section-title">The following extensions depend on this extension:</div>
+            <div class="section-content">
+              <ul id="dependent-extensions-list">
+                <template is="dom-repeat" items="[[data.dependentExtensions]]">
+                  <li>[[computeDependentEntry_(item)]]</li>
+                </template>
+              </ul>
+            </div>
+          </div>
+        </template>
+        <template is="dom-if" if="[[shouldShowOptionsSection_(data.*)]]">
+          <div id="options-section">
+            <template is="dom-if" if="[[shouldShowIncognitoOption_(
+                  data.incognitoAccess.isEnabled, incognitoAvailable)]]">
+              <extensions-toggle-row id="allow-incognito" class="three-line" checked="[[data.incognitoAccess.isActive]]" on-change="onAllowIncognitoChange_">
+                <div>
+                  <div>Allow in incognito</div>
+                  <div class="section-content">Warning: Google Chrome cannot prevent extensions from recording your browsing history. To disable this extension in incognito mode, unselect this option.</div>
+                </div>
+              </extensions-toggle-row>
+            </template>
+            <template is="dom-if" if="[[data.fileAccess.isEnabled]]">
+              <extensions-toggle-row id="allow-on-file-urls" checked="[[data.fileAccess.isActive]]" on-change="onAllowOnFileUrlsChange_">
+                <span>Allow access to file URLs</span>
+              </extensions-toggle-row>
+            </template>
+            <template is="dom-if" if="[[data.errorCollection.isEnabled]]">
+              <extensions-toggle-row id="collect-errors" checked="[[data.errorCollection.isActive]]" on-change="onCollectErrorsChange_">
+                <span>Collect errors</span>
+              </extensions-toggle-row>
+            </template>
+          </div>
+        </template>
+        <cr-link-row class="hr" is="" id="extensions-options" disabled="[[!isEnabled_(data.state)]]" hidden="[[!shouldShowOptionsLink_(data.*)]]" icon-class="icon-external" label="Extension options" on-click="onExtensionOptionsTap_">
+        </cr-link-row>
+        <cr-link-row class="hr" hidden="[[!data.manifestHomePageUrl.length]]" icon-class="icon-external" id="extensionWebsite" label="Open extension website" on-click="onExtensionWebSiteTap_">
+        </cr-link-row>
+        <cr-link-row class="hr" hidden="[[!data.webStoreUrl.length]]" icon-class="icon-external" id="viewInStore" label="View in Chrome Web Store" on-click="onViewInStoreTap_">
+        </cr-link-row>
+        <div class="section block">
+          <div class="section-title">Source</div>
+          <div id="source" class="section-content">
+            [[computeSourceString_(data.*)]]
+          </div>
+          <div id="load-path" class="section-content" hidden$="[[!data.prettifiedPath]]">
+            <span>Loaded from:</span>
+            <a is="action-link" on-click="onLoadPathTap_">
+              [[data.prettifiedPath]]
+            </a>
+          </div>
+        </div>
+        <cr-link-row class="hr" hidden="[[isControlled_(data.controlledInfo)]]" icon-class="subpage-arrow" id="remove-extension" label="Remove extension" on-click="onRemoveTap_">
+        </cr-link-row>
+      </div>
+    </div>
+  </template>
+  </dom-module>
+<dom-module id="extensions-drop-overlay" assetpath="chrome://extensions/" css-build="shadow">
+  <template>
+    <style include="cr-hidden-style" scope="extensions-drop-overlay">:host {
+  align-items: center;
+        background-color: #f1f1f1;
+        display: flex;
+        height: 100%;
+        justify-content: center;
+        opacity: 0.9;
+        position: absolute;
+        width: 100%;
+        z-index: 10;
+}
+
+#container {
+  align-items: center;
+        display: flex;
+        flex-direction: column;
+}
+
+iron-icon {
+  color: var(--google-grey-refresh-700);
+        height: 64px;
+        margin-bottom: 16px;
+        width: 64px;
+}
+
+#text {
+  color: #6e6e6e;
+        font-size: 123.1%;
+        font-weight: 500;
+}
+
+</style>
+    <div id="container">
+      <iron-icon icon="cr:extension"></iron-icon>
+      <div id="text">Drop to install</div>
+    </div>
+  </template>
+  </dom-module>
+<dom-module id="iron-collapse" assetpath="chrome://resources/polymer/v1_0/iron-collapse/" css-build="shadow">
+
+  <template>
+
+    <style scope="iron-collapse">:host {
+  display: block;
+        transition-duration: var(--iron-collapse-transition-duration, 300ms);
+        
+        overflow: visible;
+}
+
+:host(.iron-collapse-closed) {
+  display: none;
+}
+
+:host(:not(.iron-collapse-opened)) {
+  overflow: hidden;
+}
+
+</style>
+
+    <slot></slot>
+
+  </template>
+
+</dom-module>
+
+<custom-style>
+  <style is="custom-style" css-build="shadow">html {
+  --shadow-transition_-_transition:  box-shadow 0.28s cubic-bezier(0.4, 0, 0.2, 1);;
+
+      --shadow-none_-_box-shadow:  none;;
+
+      
+
+      --shadow-elevation-2dp_-_box-shadow:  0 2px 2px 0 rgba(0, 0, 0, 0.14),
+                    0 1px 5px 0 rgba(0, 0, 0, 0.12),
+                    0 3px 1px -2px rgba(0, 0, 0, 0.2);;
+
+      --shadow-elevation-3dp_-_box-shadow:  0 3px 4px 0 rgba(0, 0, 0, 0.14),
+                    0 1px 8px 0 rgba(0, 0, 0, 0.12),
+                    0 3px 3px -2px rgba(0, 0, 0, 0.4);;
+
+      --shadow-elevation-4dp_-_box-shadow:  0 4px 5px 0 rgba(0, 0, 0, 0.14),
+                    0 1px 10px 0 rgba(0, 0, 0, 0.12),
+                    0 2px 4px -1px rgba(0, 0, 0, 0.4);;
+
+      --shadow-elevation-6dp_-_box-shadow:  0 6px 10px 0 rgba(0, 0, 0, 0.14),
+                    0 1px 18px 0 rgba(0, 0, 0, 0.12),
+                    0 3px 5px -1px rgba(0, 0, 0, 0.4);;
+
+      --shadow-elevation-8dp_-_box-shadow:  0 8px 10px 1px rgba(0, 0, 0, 0.14),
+                    0 3px 14px 2px rgba(0, 0, 0, 0.12),
+                    0 5px 5px -3px rgba(0, 0, 0, 0.4);;
+
+      --shadow-elevation-12dp_-_box-shadow:  0 12px 16px 1px rgba(0, 0, 0, 0.14),
+                    0 4px 22px 3px rgba(0, 0, 0, 0.12),
+                    0 6px 7px -4px rgba(0, 0, 0, 0.4);;
+
+      --shadow-elevation-16dp_-_box-shadow:  0 16px 24px 2px rgba(0, 0, 0, 0.14),
+                    0  6px 30px 5px rgba(0, 0, 0, 0.12),
+                    0  8px 10px -5px rgba(0, 0, 0, 0.4);;
+
+      --shadow-elevation-24dp_-_box-shadow:  0 24px 38px 3px rgba(0, 0, 0, 0.14),
+                    0 9px 46px 8px rgba(0, 0, 0, 0.12),
+                    0 11px 15px -7px rgba(0, 0, 0, 0.4);;
+}
+
+</style>
+</custom-style>
+<dom-module id="paper-material-styles" assetpath="chrome://resources/polymer/v1_0/paper-styles/element-styles/" css-build="shadow">
+  <template>
+    <style scope="paper-material-styles">:host, html {
+  --paper-material_-_display:  block; --paper-material_-_position:  relative;;
+        --paper-material-elevation-1_-_box-shadow:  var(--shadow-elevation-2dp_-_box-shadow);;
+        --paper-material-elevation-2_-_box-shadow:  var(--shadow-elevation-4dp_-_box-shadow);;
+        --paper-material-elevation-3_-_box-shadow:  var(--shadow-elevation-6dp_-_box-shadow);;
+        --paper-material-elevation-4_-_box-shadow:  var(--shadow-elevation-8dp_-_box-shadow);;
+        --paper-material-elevation-5_-_box-shadow:  var(--shadow-elevation-16dp_-_box-shadow);;
+}
+
+:host(.paper-material), .paper-material {
+  display: var(--paper-material_-_display); position: var(--paper-material_-_position);
+}
+
+:host(.paper-material[elevation="1"]), .paper-material[elevation="1"] {
+  box-shadow: var(--paper-material-elevation-1_-_box-shadow);
+}
+
+:host(.paper-material[elevation="2"]), .paper-material[elevation="2"] {
+  box-shadow: var(--paper-material-elevation-2_-_box-shadow);
+}
+
+:host(.paper-material[elevation="3"]), .paper-material[elevation="3"] {
+  box-shadow: var(--paper-material-elevation-3_-_box-shadow);
+}
+
+:host(.paper-material[elevation="4"]), .paper-material[elevation="4"] {
+  box-shadow: var(--paper-material-elevation-4_-_box-shadow);
+}
+
+:host(.paper-material[elevation="5"]), .paper-material[elevation="5"] {
+  box-shadow: var(--paper-material-elevation-5_-_box-shadow);
+}
+
+</style>
+  </template>
+</dom-module>
+<dom-module id="paper-button" assetpath="chrome://resources/polymer/v1_0/paper-button/" css-build="shadow">
+  <template strip-whitespace="">
+    <style include="paper-material-styles" scope="paper-button">:host {
+  display: var(--layout-inline_-_display);
+        align-items: var(--layout-center-center_-_align-items); justify-content: var(--layout-center-center_-_justify-content);
+        position: relative;
+        box-sizing: border-box;
+        min-width: 5.14em;
+        margin: 0 0.29em;
+        background: transparent;
+        -webkit-tap-highlight-color: rgba(0, 0, 0, 0);
+        -webkit-tap-highlight-color: transparent;
+        font: inherit;
+        text-transform: uppercase;
+        outline-width: 0;
+        border-radius: 3px;
+        user-select: none;
+        cursor: pointer;
+        z-index: 0;
+        padding: 0.7em 0.57em;
+
+        ;
+        ;
+}
+
+:host([elevation="1"]) {
+  box-shadow: var(--paper-material-elevation-1_-_box-shadow);
+}
+
+:host([elevation="2"]) {
+  box-shadow: var(--paper-material-elevation-2_-_box-shadow);
+}
+
+:host([elevation="3"]) {
+  box-shadow: var(--paper-material-elevation-3_-_box-shadow);
+}
+
+:host([elevation="4"]) {
+  box-shadow: var(--paper-material-elevation-4_-_box-shadow);
+}
+
+:host([elevation="5"]) {
+  box-shadow: var(--paper-material-elevation-5_-_box-shadow);
+}
+
+:host([hidden]) {
+  display: none !important;
+}
+
+:host([raised].keyboard-focus) {
+  font-weight: bold;
+        ;
+}
+
+:host(:not([raised]).keyboard-focus) {
+  font-weight: bold;
+        ;
+}
+
+:host([disabled]) {
+  background: #eaeaea;
+        color: #a8a8a8;
+        cursor: auto;
+        pointer-events: none;
+
+        ;
+}
+
+:host([animated]) {
+  transition: var(--shadow-transition_-_transition);
+}
+
+paper-ripple {
+  color: var(--paper-button-ink-color);
+}
+
+</style>
+
+    <slot></slot>
+  </template>
+
+  </dom-module>
+<dom-module id="extensions-code-section" assetpath="chrome://extensions/" css-build="shadow">
+  <template>
+    <style include="cr-hidden-style" scope="extensions-code-section">:host {
+  display: block;
+}
+
+#scroll-container {
+  border: 1px solid var(--paper-grey-500);
+        height: 100%;
+        overflow: auto;
+        position: relative;
+}
+
+#main {
+  color: var(--paper-grey-800);
+        display: flex;
+        font-family: monospace;
+        min-height: 100%;
+}
+
+#line-numbers {
+  background: var(--paper-grey-300);
+        border-right: 1px solid var(--paper-grey-500);
+        display: flex;
+        flex-direction: column;
+        padding: 0 8px;
+        text-align: right;
+}
+
+#source {
+  -webkit-margin-start: 4px;
+        display: flex;
+        flex-direction: column;
+}
+
+#line-numbers span, #source span {
+  white-space: pre;
+}
+
+#no-code {
+  color: var(--paper-grey-800);
+        text-align: center;
+}
+
+.more-code {
+  color: var(--paper-grey-500);
+}
+
+#highlight-description {
+  height: 0;
+        overflow: hidden;
+}
+
+</style>
+    <div id="scroll-container" hidden="[[!highlighted_]]">
+      <div id="main">
+        <div id="line-numbers" aria-hidden="true">
+          <div class="more-code before" hidden="[[!truncatedBefore_]]">
+            ...
+          </div>
+          <span>[[lineNumbers_]]</span>
+          <div class="more-code after" hidden="[[!truncatedAfter_]]">
+            ...
+          </div>
+        </div>
+        <div id="source">
+          <div class="more-code before" hidden="[[!truncatedBefore_]]">
+            [[getLinesNotShownLabel_(
+                truncatedBefore_,
+                '<1 line not shown>',
+                '<$1 lines not shown>')]]
+          </div>
+          <span><span>[[before_]]</span><mark aria-label$="[[highlighted_]]" aria-describedby="highlight-description"><span aria-hidden="true">[[highlighted_]]</span></mark><span>[[after_]]</span></span>
+          <div class="more-code after" hidden="[[!truncatedAfter_]]">
+            [[getLinesNotShownLabel_(
+                truncatedAfter_,
+                '<1 line not shown>',
+                '<$1 lines not shown>')]]
+          </div>
+        </div>
+      </div>
+    </div>
+    <div id="no-code" hidden="[[highlighted_]]">[[couldNotDisplayCode]]</div>
+    <div id="highlight-description" aria-hidden="true">
+      [[highlightDescription_]]
+    </div>
+  </template>
+  </dom-module>
+<dom-module id="extensions-error-page" assetpath="chrome://extensions/" css-build="shadow">
+  <template>
+    <style include="paper-button-style cr-icons cr-shared-style" scope="extensions-error-page">:host {
+  display: block;
+        height: 100%;
+}
+
+#container {
+  height: 100%;
+        overflow: overlay;
+}
+
+iron-icon {
+  --iron-icon-fill-color: var(--google-grey-refresh-700);
+        height: var(--cr-icon-height-width_-_height); width: var(--cr-icon-height-width_-_width);
+        flex-shrink: 0;
+}
+
+iron-icon[icon='cr:warning'] {
+  --iron-icon-fill-color: var(--paper-orange-500);
+}
+
+iron-icon[icon='cr:error'] {
+  --iron-icon-fill-color: var(--paper-red-700);
+}
+
+#main {
+  box-shadow: var(--cr-card-elevation_-_box-shadow);
+        background-color: white;
+        margin: auto;
+        min-height: 100%;
+        width: 640px;
+}
+
+.section {
+  padding: 0 var(--cr-section-padding);
+}
+
+#heading {
+  align-items: center;
+        display: flex;
+        height: 40px;
+        margin-bottom: 30px;
+        padding: 8px 12px 0;
+        color: var(--cr-title-text_-_color); font-size: var(--cr-title-text_-_font-size); font-weight: var(--cr-title-text_-_font-weight);
+}
+
+#heading span {
+  flex: 1;
+        margin: 0 10px;
+}
+
+#errorsList {
+  min-height: 100px;
+}
+
+.error-item {
+  align-items: var(--cr-section_-_align-items); border-top: var(--cr-section_-_border-top); display: var(--cr-section_-_display); min-height: var(--cr-section_-_min-height); padding: var(--cr-section_-_padding);
+        padding-left: 0;
+}
+
+.error-item paper-icon-button-light {
+  -webkit-margin-end: 0;
+}
+
+.error-item.selected {
+  background-color: rgba(0, 0, 0, 0.08);
+}
+
+.error-item .start {
+  align-items: center;
+        align-self: stretch;  
+        display: flex;
+        flex: 1;
+        padding: 0 var(--cr-section-padding);
+}
+
+.error-message {
+  -webkit-margin-start: 10px;
+        flex-grow: 1;
+        word-break: break-word;
+}
+
+.devtools-controls {
+  padding: 0 var(--cr-section-padding);
+}
+
+.details-heading {
+  color: var(--cr-title-text_-_color); font-size: var(--cr-title-text_-_font-size); font-weight: var(--cr-title-text_-_font-weight);
+        align-items: center;
+        display: flex;
+        height: var(--cr-section-min-height);
+}
+
+.stack-trace-container {
+  list-style: none;
+        margin-top: 0;
+        padding: 0;
+}
+
+.stack-trace-container li {
+  cursor: pointer;
+        font-family: monospace;
+        padding: 4px;
+}
+
+.stack-trace-container li.selected, .stack-trace-container li:hover {
+  background: var(--google-blue-100);
+}
+
+extensions-code-section {
+  background: white;
+        height: 200px;
+        margin-bottom: 20px;
+}
+
+.separator {
+  --separator-gaps: 9px;
+        -webkit-border-start: var(--cr-separator-line);
+        -webkit-margin-end: var(--cr-section-padding);
+        
+        -webkit-margin-start: 0;
+        flex-shrink: 0;
+        height: calc(var(--cr-section-min-height) -
+            var(--separator-gaps));
+}
+
+.separator + paper-icon-button-light {
+  -webkit-margin-start: var(--cr-icon-ripple-margin);
+}
+
+:host-context(.focus-outline-visible) .start:focus {
+  outline: -webkit-focus-ring-color auto 5px;
+}
+
+.start:focus {
+  outline: none;
+}
+
+</style>
+    <div id="container">
+      <div id="main">
+        <div id="heading">
+          <paper-icon-button-light class="icon-arrow-back no-overlap">
+            <button id="closeButton" aria-label="Back" on-click="onCloseButtonTap_">
+            </button>
+          </paper-icon-button-light>
+          <span>Errors</span>
+          <paper-button on-click="onClearAllTap_" hidden="[[!entries_.length]]">
+            Clear all
+          </paper-button>
+        </div>
+        <div class="section">
+          <div id="errorsList">
+            <template is="dom-repeat" items="[[entries_]]">
+              <div class="item-container">
+                <div class$="error-item
+                    [[computeErrorClass_(item, selectedEntry_)]]">
+                  <div actionable="" class="start" on-click="onErrorItemAction_" on-keydown="onErrorItemAction_" tabindex="0" role="button" aria-expanded$="[[isAriaExpanded_(
+                          index, selectedEntry_)]]">
+                    <iron-icon icon$="cr:[[computeErrorIcon_(item)]]" title$="[[computeErrorTypeLabel_(item)]]">
+                    </iron-icon>
+                    <div id$="[[item.id]]" class="error-message">
+                      [[item.message]]
+                    </div>
+                    <div class$="cr-icon [[iconName_(index, selectedEntry_)]]">
+                    </div>
+                  </div>
+                  <div class="separator"></div>
+                  <paper-icon-button-light class="icon-delete-gray">
+                    <button on-click="onDeleteErrorAction_" aria-describedby$="[[item.id]]" aria-label="Clear entry" on-keydown="onDeleteErrorAction_">
+                    </button>
+                  </paper-icon-button-light>
+                </div>
+                <iron-collapse opened="[[isOpened_(index, selectedEntry_)]]">
+                  <div class="devtools-controls">
+                    <template is="dom-if" if="[[computeIsRuntimeError_(item)]]">
+                      <div class="details-heading">
+                        Context
+                      </div>
+                      <span class="context-url">
+                        [[getContextUrl_(
+                            item, 'Unknown')]]
+                      </span>
+                      <div class="details-heading">
+                        Stack Trace
+                      </div>
+                      <ul class="stack-trace-container" on-keydown="onStackKeydown_">
+                        <template is="dom-repeat" items="[[item.stackTrace]]">
+                          <li on-click="onStackFrameTap_" tabindex$="[[getStackFrameTabIndex_(item,
+                                  selectedStackFrame_)]]" hidden="[[!shouldDisplayFrame_(item.url)]]" class$="[[getStackFrameClass_(item,
+                                  selectedStackFrame_)]]">
+                            [[getStackTraceLabel_(item)]]
+                          </li>
+                        </template>
+                      </ul>
+                    </template>
+                    <template is="dom-if" if="[[isOpened_(index, selectedEntry_)]]">
+                      <extensions-code-section code="[[code_]]" could-not-display-code="Nothing to see here, move along.">
+                      </extensions-code-section>
+                    </template>
+                  </div>
+                </iron-collapse>
+              </div>
+            </template>
+          </div>
+        </div>
+      </div>
+    </div>
+  </template>
+  </dom-module>
+<dom-module id="cr-dialog" assetpath="chrome://resources/cr_elements/cr_dialog/" css-build="shadow">
+  <template>
+    <style include="cr-hidden-style cr-icons" scope="cr-dialog">dialog {
+  --scroll-border: 1px solid var(--paper-grey-300);
+        border: 0;
+        border-radius: 8px;
+        bottom: 50%;
+        box-shadow: 0 0 16px rgba(0, 0, 0, 0.12),
+                    0 16px 16px rgba(0, 0, 0, 0.24);
+        color: inherit;
+        overflow-y: hidden;
+        padding: 0;
+        top: 50%;
+        width: 512px;
+        ;
+}
+
+dialog[open] #content-wrapper {
+  display: flex;
+        flex-direction: column;
+        max-height: 100vh;
+        overflow: auto;
+        height: var(--cr-dialog-wrapper_-_height); max-height: var(--cr-dialog-wrapper_-_max-height, 100vh); overflow: var(--cr-dialog-wrapper_-_overflow, auto);
+}
+
+.top-container, :host ::content> [slot=button-container], :host ::content> [slot=footer] {
+  flex-shrink: 0;
+}
+
+dialog::backdrop {
+  background-color: rgba(0, 0, 0, 0.6);
+        bottom: 0;
+        left: 0;
+        position: fixed;
+        right: 0;
+        top: 0;
+}
+
+:host ::content> [slot=body] {
+  -webkit-padding-end: 20px;
+        -webkit-padding-start: 20px;
+        color: var(--cr-secondary-text-color);
+        padding-bottom: 0;
+        padding-top: 0;
+        -webkit-padding-end: var(--cr-dialog-body_-_-webkit-padding-end, 20px); -webkit-padding-start: var(--cr-dialog-body_-_-webkit-padding-start, 20px); height: var(--cr-dialog-body_-_height); padding-bottom: var(--cr-dialog-body_-_padding-bottom, 0); padding-top: var(--cr-dialog-body_-_padding-top, 0);
+}
+
+:host ::content> [slot=title] {
+  -webkit-padding-end: 20px;
+        -webkit-padding-start: 20px;
+        color: var(--cr-primary-text-color);
+        flex: 1;
+        font-size: calc(15 / 13 * 100%);
+        line-height: 1;
+        padding-bottom: 16px;
+        padding-top: 20px;
+        ;
+}
+
+:host ::content> [slot=button-container] {
+  -webkit-padding-end: 16px;
+        -webkit-padding-start: 16px;
+        display: flex;
+        justify-content: flex-end;
+        padding-bottom: 16px;
+        padding-top: 24px;
+        ;
+}
+
+:host ::content> [slot=footer] {
+  border-bottom-left-radius: inherit;
+        border-bottom-right-radius: inherit;
+        border-top: 1px solid #dbdbdb;
+        margin: 0;
+        padding: 16px 20px;
+}
+
+.body-container {
+  border-bottom: 1px solid transparent;
+        border-top: 1px solid transparent;
+
+        box-sizing: border-box;
+        display: flex;
+        flex-direction: column;
+        min-height: 1.375rem; 
+        overflow: auto;
+
+        border: var(--cr-dialog-body-container_-_border); height: var(--cr-dialog-body-container_-_height); min-height: var(--cr-dialog-body-container_-_min-height, 1.375rem);
+}
+
+.body-container.bottom-scrollable {
+  border-bottom: var(--scroll-border);
+}
+
+.body-container.top-scrollable {
+  border-top: var(--scroll-border);
+}
+
+.top-container {
+  align-items: flex-start;
+        display: flex;
+        min-height: var(--cr-dialog-top-container-min-height, 31px);
+}
+
+.title-container {
+  display: flex;
+        flex: 1;
+        outline: none;
+}
+
+#closeContainer {
+  --layout-inline_-_display:  flex;;
+
+        -webkit-margin-end: 4px;
+        align-self: flex-start;
+        margin-top: 4px;
+
+        ;
+}
+
+#closeContainer:hover {
+  ;
+}
+
+#closeContainer:focus-within {
+  ;
+}
+
+#closeContainer:active {
+  ;
+}
+
+#closeContainer paper-ripple {
+  ;
+}
+
+</style>
+    <dialog id="dialog" on-close="onNativeDialogClose_" on-cancel="onNativeDialogCancel_">
+      <div id="content-wrapper">
+        <div class="top-container">
+          <div class="title-container" tabindex="-1">
+            <slot name="title"></slot>
+          </div>
+          <paper-icon-button-light id="closeContainer" class="icon-clear" hidden$="[[!showCloseButton]]">
+            <button id="close" aria-label$="[[closeText]]" on-tap="cancel" on-keypress="onCloseKeypress_">
+            </button>
+          </paper-icon-button-light>
+        </div>
+        <slot name="header"></slot>
+        <div class="body-container">
+          <span id="bodyTopMarker"></span>
+          <slot name="body"></slot>
+          <span id="bodyBottomMarker"></span>
+        </div>
+        <slot name="button-container"></slot>
+        <slot name="footer"></slot>
+      </div>
+    </dialog>
+  </template>
+  </dom-module>
+<dom-module id="extensions-install-warnings-dialog" assetpath="chrome://extensions/" css-build="shadow">
+  <template>
+    <style include="cr-shared-style paper-button-style" scope="extensions-install-warnings-dialog">div[slot='body'] ul {
+  -webkit-padding-end: 10px;
+        background-color: var(--paper-red-50);
+        margin: 0;
+        padding-bottom: 10px;
+        padding-top: 10px;
+}
+
+</style>
+    <cr-dialog id="dialog" close-text="Close">
+      <div slot="title">There were warnings when trying to install this extension:</div>
+      <div slot="body">
+        <ul>
+          <template is="dom-repeat" items="[[installWarnings]]">
+            <li>[[item]]</li>
+          </template>
+        </ul>
+      </div>
+      <div slot="button-container">
+        <paper-button class="action-button" on-click="onOkTap_">
+          OK
+        </paper-button>
+      </div>
+    </cr-dialog>
+  </template>
+  </dom-module>
+<dom-module id="iron-a11y-announcer" assetpath="chrome://resources/polymer/v1_0/iron-a11y-announcer/" css-build="shadow">
+  <template>
+    <style scope="iron-a11y-announcer">:host {
+  display: inline-block;
+        position: fixed;
+        clip: rect(0px,0px,0px,0px);
+}
+
+</style>
+    <div aria-live$="[[mode]]">[[_text]]</div>
+  </template>
+
+  </dom-module>
+<iron-iconset-svg name="extensions-icons" size="24">
+<svg>
+<defs>
+  <g id="unpacked">
+    <defs>
+      <style>
+        .cls-1 {
+          fill: none;
+        }
+      </style>
+    </defs>
+    <path class="cls-1" d="M0,0H24V24H0V0Z"></path>
+    <circle cx="9" cy="12" r="1"></circle>
+    <path d="M20,5H4A2,2,0,0,0,2,7V17a2,2,0,0,0,2,2H20a2,2,0,0,0,2-2V7A2,2,0,0,0,20,5ZM9,17a5,5,0,1,1,5-5A5,5,0,0,1,9,17Zm11,1a1,1,0,1,1,1-1A1,1,0,0,1,20,18ZM20,8a1,1,0,1,1,1-1A1,1,0,0,1,20,8Z"></path>
+  </g>
+
+  <g id="input"><path d="M21 3.01H3c-1.1 0-2 .9-2 2V9h2V4.99h18v14.03H3V15H1v4.01c0 1.1.9 1.98 2 1.98h18c1.1 0 2-.88 2-1.98v-14c0-1.11-.9-2-2-2zM11 16l4-4-4-4v3H1v2h10v3z"></path></g>
+  <g id="business"><path d="M12 7V3H2v18h20V7H12zM6 19H4v-2h2v2zm0-4H4v-2h2v2zm0-4H4V9h2v2zm0-4H4V5h2v2zm4 12H8v-2h2v2zm0-4H8v-2h2v2zm0-4H8V9h2v2zm0-4H8V5h2v2zm10 12h-8v-2h2v-2h-2v-2h2v-2h-2V9h8v10zm-2-8h-2v2h2v-2zm0 4h-2v2h2v-2z"></path></g>
+</defs>
+</svg>
+</iron-iconset-svg>
+<dom-module id="extensions-item" assetpath="chrome://extensions/" css-build="shadow">
+  <template>
+    <style include="iron-flex cr-hidden-style cr-icons action-link paper-button-style" scope="extensions-item">.bounded-text, .multiline-clippable-text, .clippable-flex-text {
+  overflow: hidden;
+        text-overflow: ellipsis;
+}
+
+.bounded-text, .clippable-flex-text {
+  white-space: nowrap;
+}
+
+.clipppable-flex-text {
+  flex-shrink: 1;
+}
+
+#icon-wrapper {
+  align-self: flex-start;
+        display: flex;
+        padding: 6px;
+        position: relative;
+}
+
+#icon {
+  height: 36px;
+        width: 36px;
+}
+
+#card {
+  box-shadow: var(--cr-card-elevation_-_box-shadow);
+        background: white;
+        border-radius: var(--cr-card-border-radius);
+        display: flex;
+        flex-direction: column;
+        height: 160px;
+        
+        transition: height 300ms cubic-bezier(.25, .1, .25, 1);
+}
+
+#card.dev-mode {
+  height: 208px;
+}
+
+#main {
+  display: flex;
+        flex: 1;
+        padding: 16px 20px;
+}
+
+#content {
+  -webkit-margin-start: 24px;
+        display: flex;
+        flex: 1;
+        flex-direction: column;
+        overflow: hidden;
+}
+
+#name-and-version {
+  color: var(--cr-primary-text_-_color); line-height: var(--cr-primary-text_-_line-height);
+        margin-bottom: 4px;
+}
+
+#name {
+  -webkit-margin-end: 8px;
+}
+
+#description {
+  flex: 1;
+}
+
+#warnings {
+  color: var(--google-red-700);
+        flex: 1;
+        margin-bottom: 8px;
+}
+
+#error-icon {
+  --iron-icon-fill-color: var(--google-red-700);
+        -webkit-margin-end: 4px;
+        height: 18px;
+        width: 18px;
+}
+
+#description, #version, #extension-id, #inspect-views, #button-strip {
+  color: var(--cr-secondary-text_-_color); font-weight: var(--cr-secondary-text_-_font-weight);
+}
+
+#extension-id {
+  flex-shrink: 0;
+}
+
+#inspect-views {
+  display: flex;
+        white-space: nowrap;
+}
+
+#inspect-views > span {
+  -webkit-margin-end: 4px;
+}
+
+#button-strip {
+  -webkit-padding-end: 20px;
+        box-sizing: border-box;
+        flex-shrink: 0;
+        height: var(--cr-section-min-height);
+        padding-bottom: 8px;
+        padding-top: 8px;
+}
+
+#button-strip paper-button {
+  -webkit-margin-start: 8px;
+}
+
+#learn-more-link {
+  color: var(--google-blue-700);
+        text-decoration: none;
+}
+
+#source-indicator {
+  -webkit-margin-start: 24px;
+        margin-top: 24px;
+        position: absolute;
+}
+
+.source-icon-wrapper {
+  align-items: center;
+        background: rgb(241, 89, 43);
+        border-radius: 50%;  
+        box-shadow: 0 1px 1px 0 rgba(0, 0, 0, 0.22),
+                    0 2px 2px 0 rgba(0, 0, 0, 0.12);
+        display: flex;
+        height: 22px;
+        justify-content: center;
+        width: 22px;
+}
+
+#source-indicator iron-icon {
+  color: white;
+        height: 16px;
+        width: 16px;
+}
+
+paper-tooltip {
+  --paper-tooltip_-_font-size:  var(--cr-tooltip_-_font-size); --paper-tooltip_-_font-weight:  var(--cr-tooltip_-_font-weight); --paper-tooltip_-_max-width:  var(--cr-tooltip_-_max-width); --paper-tooltip_-_min-width:  0; --paper-tooltip_-_padding:  var(--cr-tooltip_-_padding);;
+}
+
+.action-button {
+  color: var(--google-blue-500);
+}
+
+#errors-button {
+  color: var(--google-red-700);
+}
+
+#dev-reload-button-container {
+  -webkit-margin-end: 12px;
+}
+
+#blacklisted-warning:empty {
+  display: none;
+}
+
+#a11yAssociation {
+  height: 0;
+        overflow: hidden;
+}
+
+</style>
+    <div id="a11yAssociation" aria-hidden="true">
+      [[a11yAssociation_(data.name)]]
+    </div>
+    <div id="card" class$="[[computeClasses_(data.state, inDevMode)]]">
+      <div id="main">
+        <div id="icon-wrapper">
+          <img id="icon" src="[[data.iconUrl]]" aria-describedby="a11yAssociation" alt$="[[appOrExtension(
+                  data.type,
+                  'App Icon',
+                  'Extension Icon')]]">
+          <template is="dom-if" if="[[computeSourceIndicatorIcon_(data.*)]]">
+            <div id="source-indicator">
+              <div class="source-icon-wrapper" role="img" aria-describedby="a11yAssociation" aria-label$="[[computeSourceIndicatorText_(data.*)]]">
+                <iron-icon icon="[[computeSourceIndicatorIcon_(data.*)]]">
+                </iron-icon>
+              </div>
+            </div>
+          </template>
+        </div>
+        <template is="dom-if" if="[[computeSourceIndicatorIcon_(data.*)]]">
+          <paper-tooltip id="source-indicator-text" for="source-indicator" position="top" fit-to-visible-bounds="" aria-hidden="true">
+            [[computeSourceIndicatorText_(data.*)]]
+          </paper-tooltip>
+        </template>
+        <div id="content">
+          <div>
+            <div id="name-and-version" class="layout horizontal center">
+              <div id="name" role="heading" aria-level="3" class="clippable-flex-text">[[data.name]]</div>
+              <span id="version" hidden$="[[!inDevMode]]">
+                [[data.version]]
+              </span>
+            </div>
+          </div>
+          <div id="description" class="multiline-clippable-text" hidden$="[[hasWarnings_(data.disableReasons.*, data.*)]]">
+            [[data.description]]
+          </div>
+          <template is="dom-if" if="[[hasWarnings_(data.disableReasons.*, data.*)]]">
+            <div id="warnings">
+              <iron-icon id="error-icon" icon="cr:error"></iron-icon>
+              <span id="runtime-warnings" aria-describedby="a11yAssociation" hidden$="[[!data.runtimeWarnings.length]]">
+                <template is="dom-repeat" items="[[data.runtimeWarnings]]">
+                  [[item]]
+                </template>
+              </span>
+              <span id="suspicious-warning" aria-describedby="a11yAssociation" hidden$="[[!data.disableReasons.suspiciousInstall]]">
+                This extension is not listed in the Chrome Web Store and may have been added without your knowledge.
+                <a target="_blank" id="learn-more-link" href="https://support.google.com/chrome/?p=ui_remove_non_cws_extensions&amp;hl=en-US">
+                  Learn more
+                </a>
+              </span>
+              <span id="corrupted-warning" aria-describedby="a11yAssociation" hidden$="[[!data.disableReasons.corruptInstall]]">
+                This extension may have been corrupted.
+              </span>
+              <span id="blacklisted-warning">[[data.blacklistText]]</span>
+            </div>
+          </template>
+          <template is="dom-if" if="[[inDevMode]]">
+            <div id="extension-id" class="bounded-text">[[data.id]]</div>
+            <template is="dom-if" if="[[!computeInspectViewsHidden_(data.views)]]">
+              <div>
+                <div id="inspect-views">
+                  <span aria-describedby="a11yAssociation">
+                    Inspect views
+                  </span>
+                  <a class="clippable-flex-text" is="action-link" title="[[computeFirstInspectTitle_(data.views)]]" on-click="onInspectTap_">
+                    [[computeFirstInspectLabel_(data.views)]]
+                  </a>
+                  <a is="action-link" hidden$="[[computeExtraViewsHidden_(data.views)]]" on-click="onExtraInspectTap_">
+                    [[computeExtraInspectLabel_(data.views)]]
+                  </a>
+                </div>
+              </div>
+            </template>
+          </template>
+        </div>
+      </div>
+      <div id="button-strip" class="layout horizontal center">
+        <div class="layout flex horizontal center">
+          <paper-button id="detailsButton" on-click="onDetailsTap_" aria-describedby="a11yAssociation">
+            Details
+          </paper-button>
+          <paper-button id="remove-button" on-click="onRemoveTap_" aria-describedby="a11yAssociation" hidden="[[isControlled_(data.controlledInfo)]]">
+            Remove
+          </paper-button>
+          <template is="dom-if" if="[[shouldShowErrorsButton_(data.*)]]">
+            <paper-button id="errors-button" on-click="onErrorsTap_" aria-describedby="a11yAssociation">
+              Errors
+            </paper-button>
+          </template>
+        </div>
+        <template is="dom-if" if="[[!computeDevReloadButtonHidden_(data.*)]]">
+          <paper-icon-button-light id="dev-reload-button-container" class="icon-refresh no-overlap">
+            <button id="dev-reload-button" aria-label="Reload" aria-describedby="a11yAssociation" on-click="onReloadTap_">
+            </button>
+          </paper-icon-button-light>
+        </template>
+        <template is="dom-if" if="[[data.disableReasons.corruptInstall]]">
+          <paper-button id="repair-button" class="action-button" aria-describedby="a11yAssociation" on-click="onRepairTap_">
+            Repair
+          </paper-button>
+        </template>
+        <template is="dom-if" if="[[isTerminated_(data.state)]]">
+          <paper-button id="terminated-reload-button" on-click="onReloadTap_" aria-describedby="a11yAssociation" class="action-button">
+            Reload
+          </paper-button>
+        </template>
+        <cr-toggle id="enable-toggle" aria-label$="[[appOrExtension(
+                data.type,
+                'App Enabled',
+                'Extension Enabled')]]" aria-describedby="a11yAssociation" checked="[[isEnabled_(data.state)]]" on-change="onEnableChange_" disabled="[[!isEnableToggleEnabled_(data.*)]]" hidden$="[[!showEnableToggle_(data.*)]]">
+        </cr-toggle>
+      </div>
+    </div>
+  </template>
+  </dom-module>
+<dom-module id="extensions-item-list" assetpath="chrome://extensions/" css-build="shadow">
+  <template>
+    <style include="cr-shared-style" scope="extensions-item-list">.items-container, #content-wrapper {
+  --extensions-card-width: 400px;
+}
+
+#container {
+  box-sizing: border-box;
+        height: 100%;
+        overflow: auto;
+}
+
+#content-wrapper {
+  min-width: var(--extensions-card-width);
+        padding: 24px 60px 64px;
+}
+
+.empty-list-message {
+  color: #6e6e6e;
+        font-size: 123%;  
+        font-weight: 500;
+        margin-top: 80px;
+        text-align: center;
+}
+
+.items-container {
+  --grid-gutter: 12px;
+        --max-columns: 3;
+        display: grid;
+        grid-column-gap: var(--grid-gutter);
+        grid-row-gap: var(--grid-gutter);
+        grid-template-columns: repeat(auto-fill, var(--extensions-card-width));
+        justify-content: center;
+        margin: auto;
+        max-width: calc(var(--extensions-card-width) * var(--max-columns) +
+            var(--grid-gutter) * var(--max-columns));
+}
+
+extensions-item {
+  grid-column-start: auto;
+        grid-row-start: auto;
+}
+
+#app-title {
+  color: var(--cr-section-text_-_color); font-size: var(--cr-section-text_-_font-size); font-weight: var(--cr-section-text_-_font-weight);
+        font-size: 123%;
+        font-weight: 400;
+        letter-spacing: .25px;
+        margin-bottom: 12px;
+        margin-top: 21px;
+        padding-bottom: 4px;
+        padding-top: 8px;
+}
+
+</style>
+    <div id="container">
+      <div id="content-wrapper">
+        <div id="no-items" class="empty-list-message" hidden$="[[!shouldShowEmptyItemsMessage_(
+                apps.length, extensions.length)]]">
+          <span on-click="onNoExtensionsTap_">
+            Find extensions and themes in the <a target="_blank" href="https://chrome.google.com/webstore/category/extensions">Chrome Web Store</a>
+          </span>
+        </div>
+        <div id="no-search-results" class="empty-list-message" hidden$="[[!shouldShowEmptySearchMessage_(
+                shownAppsCount_, shownExtensionsCount_, apps, extensions)]]">
+          <span>No search results found</span>
+        </div>
+        <div class="items-container" hidden="[[!shownExtensionsCount_]]">
+          <template is="dom-repeat" items="[[extensions]]" initial-count="3" filter="[[computedFilter_]]" rendered-item-count="{{shownExtensionsCount_::dom-change}}" notify-dom-change="">
+            <extensions-item id="[[item.id]]" data="[[item]]" delegate="[[delegate]]" in-dev-mode="[[inDevMode]]">
+            </extensions-item>
+          </template>
+        </div>
+        <div hidden="[[!shownAppsCount_]]">
+          <h2 id="app-title" class="items-container">Chrome Apps</h2>
+          <div class="items-container">
+            <template is="dom-repeat" items="[[apps]]" initial-count="3" filter="[[computedFilter_]]" rendered-item-count="{{shownAppsCount_::dom-change}}" notify-dom-change="">
+              <extensions-item id="[[item.id]]" data="[[item]]" delegate="[[delegate]]" in-dev-mode="[[inDevMode]]">
+              </extensions-item>
+            </template>
+          </div>
+        </div>
+      </div>
+    </div>
+  </template>
+  </dom-module>
+<dom-module id="cr-input-style" assetpath="chrome://resources/cr_elements/cr_input/" css-build="shadow">
+  <template>
+    <style scope="cr-input-style">:host {
+  --cr-input-error-color: var(--google-red-600);
+        --cr-input-focus-color: var(--google-blue-600);
+        display: block;
+        
+        outline: none;
+}
+
+#label {
+  color: var(--cr-form-field-label_-_color); display: var(--cr-form-field-label_-_display); font-size: var(--cr-form-field-label_-_font-size); font-weight: var(--cr-form-field-label_-_font-weight); letter-spacing: var(--cr-form-field-label_-_letter-spacing); line-height: var(--cr-form-field-label_-_line-height); margin-bottom: var(--cr-form-field-label_-_margin-bottom);
+}
+
+:host([focused_]:not([readonly]):not([invalid])) #label {
+  color: var(--cr-input-focus-color);
+}
+
+#input-container {
+  border-radius: 4px;
+        overflow: hidden;
+        position: relative;
+        width: var(--cr-input-width, 100%);
+
+        ;
+}
+
+#input {
+  -webkit-appearance: none;
+        background-color: var(--cr-input-background-color,
+            var(--google-grey-refresh-100));
+        border: none;
+        box-sizing: border-box;
+        caret-color: var(--cr-input-focus-color);
+        color: var(--cr-input-color, var(--google-grey-900));
+        font-family: inherit;
+        font-size: inherit;
+        line-height: inherit;
+        outline: none;
+        text-align: inherit;
+        text-overflow: ellipsis;
+        width: 100%;
+
+        
+        -webkit-padding-end: 8px;
+        -webkit-padding-start: 8px;
+        padding-bottom: 6px;
+        padding-top: 6px;
+
+        ;
+}
+
+#underline {
+  border-bottom: 2px solid var(--cr-input-focus-color);
+        bottom: 0;
+        box-sizing: border-box;
+        left: 0;
+        margin: auto;
+        opacity: 0;
+        position: absolute;
+        right: 0;
+        transition: opacity 120ms ease-out, width 0 linear 180ms;
+        width: 0;
+}
+
+:host([invalid]) #underline, :host([focused_]:not([readonly])) #underline {
+  opacity: 1;
+        transition: width 180ms ease-out, opacity 120ms ease-in;
+        width: 100%;
+}
+
+</style>
+  </template>
+</dom-module>
+<dom-module id="cr-input" assetpath="chrome://resources/cr_elements/cr_input/" css-build="shadow">
+  <template>
+    <style include="cr-hidden-style cr-input-style" scope="cr-input">:host([disabled]) :-webkit-any(#label, #error, #input-container) {
+  opacity: var(--cr-disabled-opacity);
+        pointer-events: none;
+}
+
+:host ::content> paper-button[slot=suffix] {
+  -webkit-margin-start: var(--cr-button-edge-spacing);
+}
+
+:host([invalid]) #label {
+  color: var(--cr-input-error-color);
+}
+
+#input::placeholder {
+  color: var(--cr-input-placeholder-color,
+            var(--google-grey-refresh-700));
+}
+
+:host([invalid]) #input {
+  caret-color: var(--cr-input-error-color);
+}
+
+:host([readonly]) #input {
+  opacity: 0.6;
+}
+
+:host([invalid]) #underline {
+  border-color: var(--cr-input-error-color);
+}
+
+#error {
+  color: var(--cr-input-error-color);
+        display: var(--cr-input-error-display, block);
+        font-size: var(--cr-form-field-label-font-size);
+        height: var(--cr-form-field-label-font-size);
+        line-height: var(--cr-form-field-label-font-size);
+        margin: 8px 0;
+        visibility: hidden;
+}
+
+:host([invalid]) #error {
+  visibility: visible;
+}
+
+#row-container {
+  align-items: center;
+        display: flex;
+        
+        justify-content: space-between;
+        position: relative;
+
+        ;
+}
+
+#input[type='search']::-webkit-search-cancel-button {
+  -webkit-appearance: none;
+}
+
+</style>
+    <div id="label" hidden="[[!label]]" aria-hidden="true">[[label]]</div>
+    <div id="row-container">
+      <div id="input-container">
+        <input id="input" disabled="[[disabled]]" autofocus="[[autofocus]]" value="{{value::input}}" tabindex$="[[tabindex]]" type="[[type]]" readonly$="[[readonly]]" maxlength$="[[maxlength]]" pattern="[[pattern]]" required="[[required]]" incremental="[[incremental]]" minlength$="[[minlength]]">
+        <div id="underline"></div>
+      </div>
+      <slot name="suffix"></slot>
+    </div>
+    <div id="error">[[errorMessage]]</div>
+  </template>
+  </dom-module>
+<dom-module id="extensions-shortcut-input" assetpath="chrome://extensions/" css-build="shadow">
+  <template>
+    <style include="cr-icons cr-hidden-style" scope="extensions-shortcut-input">#main {
+  position: relative;
+        width: 200px;
+}
+
+#clearContainer {
+  --cr-icon-ripple-size: 28px;
+        position: absolute;
+        right: 2px;
+}
+
+:host-context([dir='rtl']) #clearContainer {
+  left: -2px;
+        right: inherit;
+}
+
+</style>
+    <div id="main">
+      <cr-input id="input" placeholder="Type a shortcut" error-message="[[getErrorString_(error_,
+              'Include Ctrl\, Alt\, or Search',
+              'Invalid combination',
+              'Type a letter')]]" value="[[computeText_(capturing_, shortcut, pendingShortcut_)]]">
+        <paper-icon-button-light id="clearContainer" slot="suffix" class="icon-cancel no-overlap" hidden$="[[computeClearHidden_(capturing_, shortcut)]]">
+          <button id="clear" on-click="onClearTap_"></button>
+        </paper-icon-button-light>
+      </cr-input>
+    </div>
+  </template>
+  </dom-module>
+<dom-module id="extensions-keyboard-shortcuts" assetpath="chrome://extensions/" css-build="shadow">
+  <template>
+    <style include="md-select cr-shared-style" scope="extensions-keyboard-shortcuts">:host {
+  height: 100%;
+}
+
+.shortcut-card {
+  color: var(--cr-primary-text_-_color); line-height: var(--cr-primary-text_-_line-height);
+        box-shadow: var(--cr-card-elevation_-_box-shadow);
+        background-color: white;
+        border-radius: var(--cr-card-border-radius);
+        margin: 0 auto 16px auto;
+        padding-bottom: 8px;
+        width: var(--cr-toolbar-field-width);
+}
+
+.shortcut-card:last-of-type {
+  margin-bottom: 64px;
+}
+
+#container {
+  box-sizing: border-box;
+        height: 100%;
+        overflow: overlay;
+        padding-top: 24px;
+}
+
+.command-entry {
+  align-items: start;
+        display: flex;
+        
+        margin-bottom: -8px;
+        padding-top: 16px;
+}
+
+.command-name {
+  flex: 1;
+        margin-top: 6px;
+}
+
+.command-entry .md-select {
+  -webkit-margin-start: var(--cr-section-padding);
+        line-height: 22px;
+}
+
+.card-title {
+  align-items: center;
+        border-bottom: var(--cr-separator-line);
+        display: flex;
+        margin-bottom: 9px;
+        padding: 16px var(--cr-section-padding);
+        color: var(--cr-title-text_-_color); font-size: var(--cr-title-text_-_font-size); font-weight: var(--cr-title-text_-_font-weight);
+}
+
+.icon {
+  -webkit-margin-end: 20px;
+        height: 20px;
+        width: 20px;
+}
+
+.card-controls {
+  -webkit-margin-end: 20px;
+        -webkit-margin-start: 60px;
+}
+
+</style>
+    <div id="container">
+      <template is="dom-repeat" items="[[calculateShownItems_(items.*)]]">
+        <div class="shortcut-card">
+          <div class="card-title">
+            <img class="icon" src="[[item.iconUrl]]" alt$="[[appOrExtension(
+                    item.type,
+                    'App Icon',
+                    'Extension Icon')]]">
+            <span>[[item.name]]</span>
+          </div>
+          <div class="card-controls">
+            <template is="dom-repeat" items="[[item.commands]]" as="command">
+              <div class="command-entry" command="[[command]]">
+                <span class="command-name">[[command.description]]</span>
+                <extensions-shortcut-input delegate="[[delegate]]" item="[[item.id]]" shortcut="[[command.keybinding]]" command-name="[[command.name]]">
+                </extensions-shortcut-input>
+                <select class="md-select" on-change="onScopeChanged_" disabled$="[[computeScopeDisabled_(command)]]" value="[[
+                        triggerScopeChange_(command.scope, CommandScope_)]]">
+                  <option value$="[[CommandScope_.CHROME]]">
+                    In Chrome
+                  </option>
+                  <option value$="[[CommandScope_.GLOBAL]]">
+                    Global
+                  </option>
+                </select>
+              </div>
+            </template>
+          </div>
+        </div>
+      </template>
+    </div>
+  </template>
+  </dom-module>
+<dom-module id="extensions-load-error" assetpath="chrome://extensions/" css-build="shadow">
+  <template>
+    <style include="cr-shared-style paper-button-style" scope="extensions-load-error">.description-row {
+  display: flex;
+}
+
+.row-label {
+  display: block;
+        width: 104px;
+}
+
+paper-spinner-lite {
+  -webkit-margin-end: 8px;
+}
+
+</style>
+    <cr-dialog id="dialog" close-text="Close">
+      <div slot="title">Failed to load extension</div>
+      <div slot="body">
+        <div id="info">
+          <div id="file" class="description-row">
+            <span class="row-label">File</span>
+            <span class="row-value">[[loadError.path]]</span>
+          </div>
+          <div id="error" class="description-row">
+            <span class="row-label">Error</span>
+            <span class="row-value">[[loadError.error]]</span>
+          </div>
+        </div>
+        <extensions-code-section id="code" could-not-display-code="Could not load manifest.">
+        </extensions-code-section>
+      </div>
+      <div slot="button-container">
+        <paper-spinner-lite active="[[retrying_]]"></paper-spinner-lite>
+        <paper-button class="cancel-button" on-click="close">
+          Cancel
+        </paper-button>
+        <paper-button class="action-button" disabled="[[retrying_]]" on-click="onRetryTap_">
+          Retry
+        </paper-button>
+      </div>
+    </cr-dialog>
+  </template>
+  </dom-module>
+<dom-module id="extensions-options-dialog" assetpath="chrome://extensions/" css-build="shadow">
+  <template>
+    <style scope="extensions-options-dialog">#icon {
+  -webkit-margin-end: 10px;
+        height: 32px;
+        width: 32px;
+}
+
+#icon-and-name-wrapper {
+  align-items: center;
+        display: flex;
+}
+
+ExtensionOptions {
+  display: block;
+        height: 100%;
+        overflow: hidden;
+}
+
+cr-dialog {
+  --scroll-border: 0;
+        --cr-dialog-body_-_-webkit-padding-end:  0; --cr-dialog-body_-_-webkit-padding-start:  0; --cr-dialog-body_-_height:  100%; --cr-dialog-body_-_padding-bottom:  0; --cr-dialog-body_-_padding-top:  0;;
+
+        --cr-dialog-wrapper_-_height:  100%; --cr-dialog-wrapper_-_max-height: ; --cr-dialog-wrapper_-_overflow:  hidden;;
+
+        --cr-dialog-body-container_-_border:  none; --cr-dialog-body-container_-_height:  100%; --cr-dialog-body-container_-_min-height: ;;
+}
+
+</style>
+
+    <cr-dialog id="dialog" close-text="Close" on-close="onClose_" show-close-button="">
+      <div slot="title">
+        <div id="icon-and-name-wrapper">
+          <img id="icon" src="[[data_.iconUrl]]" alt$="[[appOrExtension(
+                  data.type,
+                  'App Icon',
+                  'Extension Icon')]]">
+          <span>[[data_.name]]</span>
+        </div>
+      </div>
+      <div slot="body" id="body">
+      </div>
+    </cr-dialog>
+  </template>
+  </dom-module>
+<dom-module id="extensions-sidebar" assetpath="chrome://extensions/" css-build="shadow">
+  <template>
+    <style include="cr-icons" scope="extensions-sidebar">:host {
+  color: #5a5a5a;
+        display: flex;
+        flex-direction: column;
+        height: 100%;
+        justify-content: space-between;
+        overflow-x: hidden;
+        overflow-y: auto;
+        width: 256px;
+}
+
+iron-selector .iron-selected {
+  color: var(--google-blue-700);
+}
+
+#sectionMenu {
+  padding-top: 8px;
+        user-select: none;
+}
+
+.section-item {
+  -webkit-margin-end: 4px;
+        -webkit-padding-start: 24px;
+        align-items: center;
+        color: inherit;
+        display: flex;
+        font-weight: 500;
+        min-height: 40px;
+        position: relative;
+        text-decoration: none;
+}
+
+.separator {
+  border-top: var(--cr-separator-line);
+        margin: 8px 0;
+}
+
+#more-extensions {
+  align-items: center;
+        display: flex;
+        justify-content: space-between;
+        margin-bottom: 8px;
+}
+
+.cr-icon {
+  -webkit-margin-end: calc(
+            var(--cr-section-padding) - var(--cr-icon-ripple-padding));
+}
+
+</style>
+    <iron-selector id="sectionMenu">
+      <a class="section-item" id="sections-extensions" href="/" on-click="onLinkTap_" data-path="items-list">
+        Extensions
+        <paper-ripple></paper-ripple>
+      </a>
+      <a class="section-item" id="sections-shortcuts" href="/shortcuts" on-click="onLinkTap_" data-path="keyboard-shortcuts">
+        Keyboard shortcuts
+        <paper-ripple></paper-ripple>
+      </a>
+    </iron-selector>
+    <div hidden="[[isSupervised]]">
+      <div class="separator"></div>
+      <a class="section-item" id="more-extensions" target="_blank" href="https://chrome.google.com/webstore/category/extensions?hl=en-US" on-click="onMoreExtensionsTap_">
+        <span>Open Chrome Web Store</span>
+        <div class="cr-icon icon-external"></div>
+        <paper-ripple></paper-ripple>
+      </a>
+    </div>
+  </template>
+  </dom-module>
+<dom-module id="cr-toast" assetpath="chrome://resources/cr_elements/cr_toast/" css-build="shadow">
+  <template>
+    <style scope="cr-toast">:host {
+  align-items: center;
+        background-color: #323232;
+        border-radius: 4px;
+        bottom: 0;
+        box-shadow: 0 2px 4px 0 rgba(0, 0, 0, 0.28);
+        box-sizing: border-box;
+        display: flex;
+        margin: 24px;
+        max-width: 568px;
+        min-height: 52px;
+        min-width: 288px;
+        opacity: 0;
+        padding: 0 24px;
+        position: fixed;
+        transform: translateY(100px);
+        transition: opacity 300ms, transform 300ms, visibility 300ms;
+        visibility: hidden;
+        white-space: nowrap;
+        z-index: 1;
+}
+
+:host([open]) {
+  opacity: 1;
+        transform: translateY(0);
+        visibility: visible;
+}
+
+:host ::content> paper-button {
+  -webkit-margin-start: 32px;
+        background-color: transparent;
+        border: none;
+        color: var(--google-blue-300);
+        min-width: 52px;
+        padding: 8px;
+}
+
+:host ::content> paper-button:hover {
+  background-color: transparent;
+}
+
+</style>
+    <slot></slot>
+  </template>
+  </dom-module>
+<dom-module id="extensions-pack-dialog-alert" assetpath="chrome://extensions/" css-build="shadow">
+  <template>
+    <style include="cr-shared-style paper-button-style" scope="extensions-pack-dialog-alert">.body {
+  white-space: pre-wrap;
+        word-break: break-word;
+}
+
+</style>
+
+    <cr-dialog id="dialog" close-text="Close">
+      <div class="title" slot="title">[[title_]]</div>
+      <div class="body" slot="body">[[model.message]]</div>
+      <div class="button-container" slot="button-container">
+        <paper-button class$="[[getCancelButtonClass_(confirmLabel_)]]" on-click="onCancelTap_" hidden="[[!cancelLabel_]]">
+          [[cancelLabel_]]
+        </paper-button>
+        <paper-button class="action-button" on-click="onConfirmTap_" hidden="[[!confirmLabel_]]">
+          [[confirmLabel_]]
+        </paper-button>
+      </div>
+    </cr-dialog>
+  </template>
+  </dom-module>
+<dom-module id="extensions-pack-dialog" assetpath="chrome://extensions/" css-build="shadow">
+  <template>
+    <style include="cr-shared-style paper-button-style" scope="extensions-pack-dialog">cr-input {
+  margin-top: var(--cr-form-field-bottom-spacing);
+        --cr-input-error-display: none;
+}
+
+paper-button[slot='suffix'] {
+  -webkit-margin-start: 10px;
+}
+
+cr-input {
+  margin-bottom: 2px;
+}
+
+</style>
+    <cr-dialog id="dialog" close-text="Close">
+      <div slot="title">Pack extension</div>
+      <div slot="body">
+        <div>Select the root directory of the extension to pack. To update an extension, also select the private key file to reuse.</div>
+        <cr-input id="root-dir" label="Extension root directory" value="{{packDirectory_}}">
+          <paper-button id="root-dir-browse" on-click="onRootBrowse_" slot="suffix">
+            Browse
+          </paper-button>
+        </cr-input>
+        <cr-input id="key-file" label="Private key file (optional)" value="{{keyFile_}}">
+          <paper-button id="key-file-browse" on-click="onKeyBrowse_" slot="suffix">
+            Browse
+          </paper-button>
+        </cr-input>
+      </div>
+      <div slot="button-container">
+        <paper-button class="cancel-button" on-click="onCancelTap_">
+          Cancel
+        </paper-button>
+        <paper-button class="action-button" on-click="onConfirmTap_" disabled="[[!packDirectory_]]">
+          Pack extension
+        </paper-button>
+      </div>
+    </cr-dialog>
+    <template is="dom-if" if="[[lastResponse_]]" restamp="">
+      <extensions-pack-dialog-alert model="[[lastResponse_]]" on-close="onAlertClose_">
+      </extensions-pack-dialog-alert>
+    </template>
+  </template>
+  </dom-module>
+<dom-module id="extensions-toolbar" assetpath="chrome://extensions/" css-build="shadow">
+  <template>
+    <style include="cr-hidden-style paper-button-style" scope="extensions-toolbar">:host {
+  --button-row-height: calc(2 * var(--padding-top-bottom) + 36px);
+        --drawer-transition: 0.3s cubic-bezier(.25, .1, .25, 1);
+        --padding-top-bottom: 8px;
+        --toolbar-color: var(--md-toolbar-color);
+}
+
+cr-toolbar {
+  background: var(--toolbar-color);
+}
+
+cr-toolbar cr-toggle {
+  --cr-toggle-checked-bar-color: var(--google-grey-refresh-100);
+        --cr-toggle-checked-button-color: white;
+        --cr-toggle-checked-ink-color: white;
+        --cr-toggle-unchecked-bar-color: var(--google-grey-600);
+        --cr-toggle-unchecked-ink-color: white;
+}
+
+cr-tooltip-icon {
+  -webkit-margin-end: 20px;
+}
+
+#devDrawer[expanded] #buttonStrip {
+  top: 0;
+}
+
+#devDrawer {
+  background: white;
+        border-bottom: 1px solid var(--google-grey-300);
+        box-sizing: border-box;
+        height: 0;
+        overflow: hidden;
+        position: relative;
+        transition: height var(--drawer-transition);
+}
+
+#devDrawer[expanded] {
+  height: var(--button-row-height);
+}
+
+#buttonStrip {
+  -webkit-margin-end: auto;
+        -webkit-margin-start: 24px;
+        padding: var(--padding-top-bottom) 0;
+        position: absolute;
+        top: calc(var(--button-row-height) * -1);
+        transition: top var(--drawer-transition);
+        
+        user-select: none;
+        width: 100%;
+}
+
+#buttonStrip paper-button {
+  -webkit-margin-end: 16px;
+}
+
+.more-actions {
+  align-items: center;
+        display: flex;
+        justify-content: flex-end;
+}
+
+.more-actions span {
+  -webkit-margin-end: 16px;
+}
+
+cr-toast > div {
+  color: #fff;
+        display: flex;
+        flex: 1;
+        overflow: hidden;
+        text-overflow: ellipsis;
+        white-space: nowrap;
+}
+
+</style>
+    <cr-toolbar page-name="Extensions" search-prompt="Search extensions" clear-label="Clear search" menu-label="Main menu" show-menu="" narrow-threshold="1000">
+      <div class="more-actions">
+        <span id="devModeLabel">Developer mode</span>
+        <cr-tooltip-icon hidden$="[[!devModeControlledByPolicy]]" tooltip-text="This setting is enforced by your administrator." icon-class="cr20:domain" icon-aria-label="This setting is enforced by your administrator.">
+        </cr-tooltip-icon>
+        <cr-toggle id="devMode" on-change="onDevModeToggleChange_" disabled="[[shouldDisableDevMode_(
+                devModeControlledByPolicy, isSupervised)]]" checked="[[inDevMode]]" aria-labelledby="devModeLabel">
+        </cr-toggle>
+      </div>
+    </cr-toolbar>
+    <template is="dom-if" if="[[showPackDialog_]]" restamp="">
+      <extensions-pack-dialog delegate="[[delegate]]" on-close="onPackDialogClose_">
+      </extensions-pack-dialog>
+    </template>
+    <div id="devDrawer" expanded$="[[expanded_]]">
+      <div id="buttonStrip">
+        <paper-button hidden$="[[!canLoadUnpacked]]" id="loadUnpacked" on-click="onLoadUnpackedTap_">
+          Load unpacked
+        </paper-button>
+        <paper-button id="packExtensions" on-click="onPackTap_">
+          Pack extension
+        </paper-button>
+        <paper-button id="updateNow" on-click="onUpdateNowTap_" title="Update extensions now">
+          Update
+        </paper-button>
+
+        <paper-button id="kioskExtensions" on-click="onKioskTap_" hidden$="[[!kioskEnabled]]">
+          Manage kiosk applications
+        </paper-button>
+
+      </div>
+    </div>
+    <cr-toast>
+      <div>[[toastLabel_]]</div>
+    </cr-toast>
+  </template>
+  </dom-module>
+<dom-module id="extensions-view-manager" assetpath="chrome://extensions/" css-build="shadow">
+  <template>
+    <style scope="extensions-view-manager">:host ::content> [slot=view] {
+  bottom: 0;
+        display: none;
+        left: 0;
+        position: absolute;
+        right: 0;
+        top: 0;
+}
+
+:host ::content> .active, :host ::content> .closing {
+  display: block;
+}
+
+</style>
+    <slot name="view"></slot>
+  </template>
+  </dom-module>
+<dom-module id="cr-checkbox" assetpath="chrome://resources/cr_elements/cr_checkbox/" css-build="shadow">
+  <template>
+    <style scope="cr-checkbox">:host {
+  -webkit-tap-highlight-color: transparent;
+        align-items: center;
+        cursor: pointer;
+        display: flex;
+        outline: none;
+        user-select: none;
+
+        --cr-checkbox-size: 16px;
+        --cr-checkbox-border-size: 2px;
+        --cr-checkbox-ripple-size: 40px;
+        --cr-checkbox-ripple-offset: calc(var(--cr-checkbox-size)/2 -
+            var(--cr-checkbox-ripple-size)/2 - var(--cr-checkbox-border-size));
+}
+
+:host([disabled]) {
+  cursor: initial;
+        opacity: var(--cr-disabled-opacity);
+        pointer-events: none;
+}
+
+#checkbox {
+  background: none;
+        border: var(--cr-checkbox-border-size) solid
+            var(--cr-checkbox-unchecked-box-color, var(--google-grey-refresh-700));
+        border-radius: 2px;
+        box-sizing: border-box;
+        cursor: pointer;
+        display: block;
+        flex-shrink: 0;
+        height: var(--cr-checkbox-size);
+        margin: 0;
+        outline: none;
+        padding: 0;
+        position: relative;
+        transform: none;  
+        width: var(--cr-checkbox-size);
+}
+
+#checkmark {
+  border-color: var(--cr-checkbox-mark-color, white);
+        border-style: solid;
+        border-width: 0 2px 2px 0;
+        content: '';
+        display: block;
+        height: 73%;
+        transform: scale(0) rotate(45deg);
+        transform-origin: 100% 80%;
+        width: 36%;
+}
+
+:host-context([dir='rtl']) #checkmark {
+  transform-origin: 50% 14%;
+}
+
+:host([checked]) #checkbox {
+  background: var(--cr-checkbox-checked-box-color,
+            var(--google-blue-600));
+        border-color: var(--cr-checkbox-checked-box-color,
+            var(--google-blue-600));
+}
+
+:host([checked]) #checkmark {
+  transform: scale(1) rotate(45deg);
+        
+        transition: transform 140ms ease-out;
+}
+
+paper-ripple {
+  --paper-ripple-opacity: var(--cr-checkbox-ripple-opacity, 0.15);
+        color: var(--cr-checkbox-ripple-unchecked-color, var(--google-grey-600));
+        height: var(--cr-checkbox-ripple-size);
+        left: var(--cr-checkbox-ripple-offset);
+        pointer-events: none;
+        top: var(--cr-checkbox-ripple-offset);
+        transition: color linear 80ms;
+        width: var(--cr-checkbox-ripple-size);
+}
+
+:host([checked]) paper-ripple {
+  --paper-ripple-opacity: var(--cr-checkbox-ripple-opacity, 0.2);
+        color: var(--cr-checkbox-ripple-checked-color, var(--google-blue-600));
+}
+
+:host-context([dir=rtl]) paper-ripple {
+  left: auto;
+        right: var(--cr-checkbox-ripple-offset);
+}
+
+#label-container {
+  -webkit-padding-start: 20px;
+        color: var(--cr-checkbox-label-color, var(--google-grey-900));
+        white-space: normal;
+
+        ;
+}
+
+:host(.no-label) #label-container {
+  display: none;
+}
+
+</style>
+    <button id="checkbox" tabindex="-1" on-focus="onButtonFocus_">
+      <span id="checkmark"></span>
+    </button>
+    <div id="label-container"><slot></slot></div>
+  </template>
+  </dom-module>
+<dom-module id="extensions-kiosk-dialog" assetpath="chrome://extensions/" css-build="shadow">
+  <template>
+    <style include="cr-shared-style paper-button-style cr-icons" scope="extensions-kiosk-dialog">#add-kiosk-app {
+  margin-bottom: 10px;
+        margin-top: 20px;
+}
+
+#add-kiosk-app cr-input {
+  width: 350px;
+}
+
+#add-kiosk-app paper-button {
+  -webkit-margin-start: 10px;
+}
+
+#kiosk-apps-list {
+  border: 1px solid var(--paper-grey-300);
+        padding: 10px;
+}
+
+.list-item {
+  align-items: center;
+        border-bottom: 1px solid var(--paper-grey-300);
+        display: flex;
+        justify-content: space-between;
+        padding: 5px;
+}
+
+.list-item:last-of-type {
+  border-bottom: none;
+}
+
+.list-item:hover {
+  background-color: var(--paper-grey-300);
+}
+
+.item-icon {
+  vertical-align: middle;
+        width: 25px;
+}
+
+.item-controls {
+  visibility: hidden;
+}
+
+.list-item:hover .item-controls {
+  visibility: visible;
+}
+
+</style>
+    <cr-dialog id="dialog" close-text="Close" ignore-enter-key="">
+      <div slot="title">Manage kiosk applications</div>
+      <div slot="body">
+        <div id="kiosk-apps-list">
+          <template is="dom-repeat" items="[[apps_]]">
+            <div class="list-item">
+              <div class="item-name">
+                <img class="item-icon" src="[[item.iconURL]]" alt$="[[appOrExtension(
+                        data.type,
+                        'App Icon',
+                        'Extension Icon')]]">
+                [[item.name]]
+                <span hidden="[[!item.autoLaunch]]">
+                  (auto-launched)
+                </span>
+              </div>
+              <div class="item-controls">
+                <paper-button hidden="[[!canEditAutoLaunch_]]" on-click="onAutoLaunchButtonTap_">
+                  [[getAutoLaunchButtonLabel_(item.autoLaunch,
+                      'Disable auto-launch',
+                      'Set to auto-launch')]]
+                </paper-button>
+                <paper-icon-button-light class="icon-delete-gray">
+                  <button on-click="onDeleteAppTap_"></button>
+                </paper-icon-button-light>
+              </div>
+            </div>
+          </template>
+        </div>
+        <div id="add-kiosk-app">
+          <cr-input id="add-input" label="Add kiosk application" placeholder="Enter application ID or webstore URL" value="{{addAppInput_}}" invalid="[[errorAppId_]]" on-keydown="clearInputInvalid_" error-message="[[getErrorMessage_(
+                  'Invalid application', errorAppId_)]]">
+            <paper-button id="add-button" on-click="onAddAppTap_" disabled="[[!addAppInput_]]" slot="suffix">
+              Add
+            </paper-button>
+          </cr-input>
+        </div>
+        <cr-checkbox disabled="[[!canEditBailout_]]" id="bailout" on-change="onBailoutChanged_" checked="[[bailoutDisabled_]]" hidden="[[!canEditAutoLaunch_]]">
+          Permanently keep this device in kiosk mode
+        </cr-checkbox>
+      </div>
+      <div slot="button-container">
+        <paper-button class="action-button" on-click="onDoneTap_">
+          Done
+        </paper-button>
+      </div>
+    </cr-dialog>
+    <cr-dialog id="confirm-dialog" close-text="Close" ignore-enter-key="" on-close="stopPropagation_">
+      <div slot="title">Are you sure you want to permanently keep this device in kiosk mode?</div>
+      <div slot="body">The only way to undo this is to re-install Chrome OS</div>
+      <div slot="button-container">
+        <paper-button class="cancel-button" on-click="onBailoutDialogCancelTap_">
+          Cancel
+        </paper-button>
+        <paper-button class="action-button" on-click="onBailoutDialogConfirmTap_">
+          Confirm
+        </paper-button>
+      </div>
+    </cr-dialog>
+  </template>
+  </dom-module>
+<dom-module id="extensions-manager" assetpath="chrome://extensions/" css-build="shadow">
+  <template>
+    <style include="cr-hidden-style" scope="extensions-manager">:host {
+  color: var(--cr-primary-text-color);
+        display: flex;
+        flex-direction: column;
+        height: 100%;
+        --cr-toolbar-field-width: 680px;
+}
+
+extensions-sidebar {
+  flex-basis: 256px;
+}
+
+#viewManager {
+  flex: 1;
+        position: relative;
+}
+
+extensions-item {
+  display: inline-block;
+}
+
+extensions-toolbar {
+  background-color: var(--md-toolbar-color);
+}
+
+</style>
+    <extensions-drop-overlay drag-enabled="[[inDevMode]]">
+    </extensions-drop-overlay>
+    <extensions-toolbar in-dev-mode="[[inDevMode]]" can-load-unpacked="[[canLoadUnpacked]]" is-supervised="[[isSupervised_]]" dev-mode-controlled-by-policy="[[devModeControlledByPolicy]]" delegate="[[delegate]]" on-cr-toolbar-menu-tap="onMenuButtonTap_" on-search-changed="onFilterChanged_" on-kiosk-tap="onKioskTap_" kiosk-enabled="[[kioskEnabled_]]">
+    </extensions-toolbar>
+    <template is="dom-if" if="[[showDrawer_]]" restamp="">
+      <cr-drawer id="drawer" heading="Extensions" align="ltr" on-close="onDrawerClose_">
+        <div class="drawer-content">
+          <extensions-sidebar id="sidebar" is-supervised="[[isSupervised_]]" on-close-drawer="onCloseDrawer_">
+          </extensions-sidebar>
+        </div>
+      </cr-drawer>
+    </template>
+    <extensions-view-manager id="viewManager" role="main">
+      <extensions-item-list id="items-list" delegate="[[delegate]]" in-dev-mode="[[inDevMode]]" filter="[[filter]]" hidden$="[[!didInitPage_]]" slot="view" apps="[[apps_]]" extensions="[[extensions_]]" on-show-install-warnings="onShowInstallWarnings_">
+      </extensions-item-list>
+      <cr-lazy-render id="details-view">
+        <template>
+          <extensions-detail-view delegate="[[delegate]]" slot="view" in-dev-mode="[[inDevMode]]" incognito-available="[[incognitoAvailable_]]" data="[[detailViewItem_]]">
+          </extensions-detail-view>
+        </template>
+      </cr-lazy-render>
+      <cr-lazy-render id="keyboard-shortcuts">
+        <template>
+          <extensions-keyboard-shortcuts delegate="[[delegate]]" slot="view" items="[[extensions_]]">
+          </extensions-keyboard-shortcuts>
+        </template>
+      </cr-lazy-render>
+      <cr-lazy-render id="error-page">
+        <template>
+          <extensions-error-page data="[[errorPageItem_]]" slot="view" delegate="[[delegate]]" in-dev-mode="[[inDevMode]]">
+          </extensions-error-page>
+        </template>
+      </cr-lazy-render>
+    </extensions-view-manager>
+    <template is="dom-if" if="[[showOptionsDialog_]]" restamp="">
+      <extensions-options-dialog id="options-dialog" on-close="onOptionsDialogClose_">
+      </extensions-options-dialog>
+    </template>
+    <template is="dom-if" if="[[showLoadErrorDialog_]]" restamp="">
+      <extensions-load-error id="load-error" delegate="[[delegate]]" on-close="onLoadErrorDialogClose_">
+      </extensions-load-error>
+    </template>
+
+    <template is="dom-if" if="[[showKioskDialog_]]" restamp="">
+      <extensions-kiosk-dialog id="kiosk-dialog" on-close="onKioskDialogClose_">
+      </extensions-kiosk-dialog>
+    </template>
+
+    <template is="dom-if" if="[[showInstallWarningsDialog_]]" restamp="">
+      <extensions-install-warnings-dialog on-close="onInstallWarningsDialogClose_" install-warnings="[[installWarnings_]]">
+      </extensions-install-warnings-dialog>
+    </template>
+  </template>
+  </dom-module>
+</div>
+  <extensions-manager></extensions-manager>
+  <style>/* Copyright 2016 The Chromium Authors. All rights reserved.
+ * Use of this source code is governed by a BSD-style license that can be
+ * found in the LICENSE file. */
+
+:root {
+  /* This is a custom, Chrome-specific color that does not have a --paper or
+   * --google equivalent. */
+  --md-background-color: rgb(248, 249, 250);
+  --md-loading-message-color: #6e6e6e;
+  /* This is --google-blue-700, rewritten as a native custom property for speed.
+   */
+  --md-toolbar-color: rgb(51, 103, 214);
+}
+</style>
+  <link rel="stylesheet" href="chrome://resources/css/text_defaults_md.css">
+  
+<script src="crisper.js"></script></body></html>
